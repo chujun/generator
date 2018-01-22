@@ -15,12 +15,12 @@
  */
 package org.mybatis.generator.api.dom.java;
 
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
-import static org.mybatis.generator.internal.util.messages.Messages.getString;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 /**
  * The Class FullyQualifiedJavaType.
@@ -35,6 +35,9 @@ public class FullyQualifiedJavaType implements
     
     /** The int instance. */
     private static FullyQualifiedJavaType intInstance = null;
+
+    /** The long instance. */
+    private static FullyQualifiedJavaType longInstance = null;
     
     /** The string instance. */
     private static FullyQualifiedJavaType stringInstance = null;
@@ -98,6 +101,10 @@ public class FullyQualifiedJavaType implements
         super();
         typeArguments = new ArrayList<FullyQualifiedJavaType>();
         parse(fullTypeSpecification);
+    }
+
+    public static FullyQualifiedJavaType from(Class<?> clz) {
+        return new FullyQualifiedJavaType(clz.getName());
     }
 
     /**
@@ -305,6 +312,14 @@ public class FullyQualifiedJavaType implements
         }
 
         return intInstance;
+    }
+
+    public static final FullyQualifiedJavaType getPrimitiveLongInstance() {
+        if (longInstance == null) {
+            longInstance = new FullyQualifiedJavaType("long"); //$NON-NLS-1$
+        }
+
+        return longInstance;
     }
 
     /**
