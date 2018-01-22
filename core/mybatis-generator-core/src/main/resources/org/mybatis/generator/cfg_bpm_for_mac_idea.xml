@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2006-2016 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<!-- org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl:用于java 
+	type和jdbc type映射 -->
+<generatorConfiguration>
+	<!-- org.mybatis.generator.config.Context.generateFiles(ProgressCallback, 
+		List<GeneratedJavaFile>, List<GeneratedXmlFile>, List<String>) -->
+	<!-- 产生文件 -->
+	<!-- org.mybatis.generator.codegen.mybatis3.IntrospectedTableMyBatis3Impl.calculateGenerators(List<String>, 
+		ProgressCallback) -->
+	<!--defaultModelType hierarchical:层级, flat:平滑,conditional(默认):条件 -->
+	<context id="icare" targetRuntime="MyBatis3" defaultModelType="conditional">
+		<property name="appName" value="icare-account" />
+		<property name="javaFileEncoding" value="UTF-8" />
+		<property name="micro.service" value="true" />
+		<property name="fileLocation"
+				  value="/Users/chujun/Documents/ideaspace/za/icare-doc/branch/20170303_20031_1/06-开发/01-工具/mybatis-generator-core"/>
+
+
+		<property name="rootPackage" value="com.zhongan.icare.bpm" />
+		<!-- commentGenerator -->
+		<commentGenerator type="org.mybatis.generator.meta.DbCommentGenerator">
+			<property name="suppressDate" value="true" />
+			<property name="suppressAllComments" value="false" />
+		</commentGenerator>
+		<!-- <jdbcConnection driverClass="com.mysql.jdbc.Driver" -->
+		<!-- connectionURL="jdbc:mysql://localhost:3306/icare_00" userId="mysql" -->
+		<!-- password="mysql"> -->
+		<!-- </jdbcConnection> -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://rds6fbqrf6fbqrf.mysql.rds.aliyuncs.com:3306/icare_00"
+			userId="za_dev_icare" password="za_dev_icare_f03893">
+		</jdbcConnection>
+
+		<!-- JavaTypeResolverConfiguration -->
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<!-- 产生 -->
+		<!-- JavaModelGeneratorConfiguration -->
+		<javaModelGenerator targetPackage="com.zhongan.icare.bpm.dao.dataObject"
+			targetProject="/Users/chujun/Documents/ideaspace/openSource/mybatis/generator/core/mybatis-generator-core/src/main/java">
+			<property name="enableSubPackages" value="false" />
+			<property name="trimStrings" value="true" />
+			<property name="rootClass"
+				value="com.zhongan.health.common.share.bean.BaseDataObject" />
+
+			<property name="dtoRootClass"
+				value="com.zhongan.health.common.share.bean.BaseDTO" />
+
+
+		</javaModelGenerator>
+
+		<!-- SqlMapGeneratorConfiguration -->
+		<sqlMapGenerator targetPackage="biz.mybatis"
+			targetProject="/Users/chujun/Documents/ideaspace/openSource/mybatis/generator/core/mybatis-generator-core/src/main/resources">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.zhongan.icare.bpm.dao" targetProject="/Users/chujun/Documents/ideaspace/openSource/mybatis/generator/core/mybatis-generator-core/src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<!-- <property name="rootInterface" value="com.zhongan.icare.common.dao.ICommonDAO" 
+				/> -->
+		</javaClientGenerator>
+
+		
+		 <!--<table tableName='act_wo_comment' domainObjectName='CommentDO'-->
+			<!--enableCountByExample='false' enableUpdateByExample='false'-->
+			<!--enableDeleteByExample='false' enableSelectByExample='false'-->
+			<!--selectByExampleQueryId='false'>-->
+			<!--<property name="micro.version" value="v1" />-->
+			<!--<property name="micro.path" value="comment" />-->
+			<!--<property name="cache" value="false" />-->
+		<!--</table>-->
+
+		<table tableName='act_hi_identitylink' domainObjectName='HistoryIdentityLinkDO'
+			   enableCountByExample='false' enableUpdateByExample='false'
+			   enableDeleteByExample='false' enableSelectByExample='false'
+			   selectByExampleQueryId='false'>
+			<property name="micro.version" value="v1" />
+			<property name="micro.path" value="history/identityLink" />
+			<property name="cache" value="false" />
+		</table>
+
+
+		
+
+
+
+
+	</context>
+
+
+	<!-- 产生文件 org.mybatis.generator.codegen.mybatis3.IntrospectedTableMyBatis3Impl.calculateJavaModelGenerators(List<String>, 
+		ProgressCallback) -->
+</generatorConfiguration>
