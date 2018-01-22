@@ -15,14 +15,15 @@
  */
 package org.mybatis.generator.api;
 
+import org.apache.commons.lang3.StringUtils;
+import org.mybatis.generator.config.Context;
+
 import static org.mybatis.generator.internal.util.EqualsUtil.areEqual;
 import static org.mybatis.generator.internal.util.HashCodeUtil.SEED;
 import static org.mybatis.generator.internal.util.HashCodeUtil.hash;
 import static org.mybatis.generator.internal.util.JavaBeansUtil.getCamelCaseString;
 import static org.mybatis.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
 import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
-
-import org.mybatis.generator.config.Context;
 
 /**
  * The Class FullyQualifiedTable.
@@ -66,6 +67,26 @@ public class FullyQualifiedTable {
 
     /** The ending delimiter. */
     private String endingDelimiter;
+
+    /**
+    * DTO名称
+    */
+    private String  domainTransferObjectName;
+
+    /**
+     * BO 名称
+     */
+    private String  businessObjectName;
+
+    /**
+     * 服务接口
+     */
+    private String  serviceInterfaceName;
+
+    /**
+     * 服务实现接口
+     */
+    private String  serviceImplName;
 
     /**
      * This object is used to hold information related to the table itself, not the columns in the table.
@@ -129,6 +150,17 @@ public class FullyQualifiedTable {
                 this.domainObjectSubPackage = domainObjectName.substring(0, index);
             }
         }
+
+        if (StringUtils.isNotEmpty(domainObjectName)) {
+            businessObjectName = domainObjectName;
+            if (domainObjectName.endsWith("DO")) {
+                businessObjectName = domainObjectName.substring(0, domainObjectName.length() - 2);
+            }
+        }
+        //TODO:cj to be added
+        domainTransferObjectName = businessObjectName + "DTO";
+        serviceInterfaceName = "I" + businessObjectName + "Service";
+        serviceImplName = businessObjectName + "ServiceImpl";
 
         if (alias == null) {
             this.alias = null;
@@ -371,5 +403,49 @@ public class FullyQualifiedTable {
         if (stringHasValue(endingDelimiter)) {
             sb.append(endingDelimiter);
         }
+    }
+
+    public String getDomainObjectSubPackage() {
+        return domainObjectSubPackage;
+    }
+
+    public void setDomainObjectSubPackage(String domainObjectSubPackage) {
+        this.domainObjectSubPackage = domainObjectSubPackage;
+    }
+
+    public String getDomainTransferObjectName() {
+        return domainTransferObjectName;
+    }
+
+    public void setDomainTransferObjectName(String domainTransferObjectName) {
+        this.domainTransferObjectName = domainTransferObjectName;
+    }
+
+    public String getBusinessObjectName() {
+        return businessObjectName;
+    }
+
+    public void setBusinessObjectName(String businessObjectName) {
+        this.businessObjectName = businessObjectName;
+    }
+
+    public String getServiceInterfaceName() {
+        return serviceInterfaceName;
+    }
+
+    public void setServiceInterfaceName(String serviceInterfaceName) {
+        this.serviceInterfaceName = serviceInterfaceName;
+    }
+
+    public String getServiceImplName() {
+        return serviceImplName;
+    }
+
+    public void setServiceImplName(String serviceImplName) {
+        this.serviceImplName = serviceImplName;
+    }
+
+    public void setDomainObjectName(String domainObjectName) {
+        this.domainObjectName = domainObjectName;
     }
 }

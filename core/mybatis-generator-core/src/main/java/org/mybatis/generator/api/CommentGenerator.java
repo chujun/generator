@@ -59,7 +59,7 @@ public interface CommentGenerator {
      * @param introspectedColumn
      *            the introspected column
      */
-    void addFieldComment(Field field,
+    public void addFieldComment(Field field,
             IntrospectedTable introspectedTable,
             IntrospectedColumn introspectedColumn);
 
