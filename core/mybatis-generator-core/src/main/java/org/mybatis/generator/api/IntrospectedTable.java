@@ -15,29 +15,17 @@
  */
 package org.mybatis.generator.api;
 
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import org.mybatis.generator.config.Context;
-import org.mybatis.generator.config.GeneratedKey;
-import org.mybatis.generator.config.JavaClientGeneratorConfiguration;
-import org.mybatis.generator.config.JavaModelGeneratorConfiguration;
-import org.mybatis.generator.config.ModelType;
-import org.mybatis.generator.config.PropertyHolder;
-import org.mybatis.generator.config.PropertyRegistry;
-import org.mybatis.generator.config.SqlMapGeneratorConfiguration;
-import org.mybatis.generator.config.TableConfiguration;
+import org.apache.commons.lang3.StringUtils;
+import org.mybatis.generator.config.*;
 import org.mybatis.generator.internal.rules.ConditionalModelRules;
 import org.mybatis.generator.internal.rules.FlatModelRules;
 import org.mybatis.generator.internal.rules.HierarchicalModelRules;
 import org.mybatis.generator.internal.rules.Rules;
+
+import java.util.*;
+
+import static org.mybatis.generator.internal.util.StringUtility.isTrue;
+import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
 
 /**
  * Base class for all code generator implementations. This class provides many
@@ -63,7 +51,21 @@ public abstract class IntrospectedTable {
     /**
      * The Enum InternalAttribute.
      */
-    protected enum InternalAttribute {
+    public enum InternalAttribute {
+        ATTR_BUSINESS_TRANSFER_TYPE,
+        ATTR_SERVICE_INTERFACE_TYPE,
+        ATTR_SERVICE_IMPL_TYPE,
+        ATTR_BUSINESS_OBJECT_TYPE,
+
+        /** The attr select all statement id. */
+        ATTR_SELECT_BY_COND,
+
+        /** The attr select all statement id. */
+        ATTR_COUNT_BY_COND,
+
+        ATTR_BASE_COND_LIST,
+
+        ATTR_DTO_TYPE,
         
         /** The attr dao implementation type. */
         ATTR_DAO_IMPLEMENTATION_TYPE,
@@ -174,7 +176,14 @@ public abstract class IntrospectedTable {
         ATTR_MYBATIS3_UPDATE_BY_EXAMPLE_WHERE_CLAUSE_ID,
         
         /** The ATT r_ mybati s3_ sq l_ provide r_ type. */
-        ATTR_MYBATIS3_SQL_PROVIDER_TYPE
+        ATTR_MYBATIS3_SQL_PROVIDER_TYPE,
+
+        /**
+         * 以下都是自定义增加
+         */
+        ATTR_SERVICE_INTERFACE_FULL_NAME,
+
+        ATTR_SERVICE_IMPL_FULL_NAME,
     }
 
     /** The table configuration. */
@@ -533,6 +542,15 @@ public abstract class IntrospectedTable {
     }
 
     /**
+     * InternalAttribute 获取内部属性值
+     * @param attr
+     * @return
+     */
+    public String getAttr(InternalAttribute attr) {
+        return internalAttributes.get(attr);
+    }
+
+    /**
      * Gets the example type.
      *
      * @return the type for the example class.
@@ -807,6 +825,10 @@ public abstract class IntrospectedTable {
         setBaseColumnListId("Base_Column_List"); //$NON-NLS-1$
         setBlobColumnListId("Blob_Column_List"); //$NON-NLS-1$
         setMyBatis3UpdateByExampleWhereClauseId("Update_By_Example_Where_Clause"); //$NON-NLS-1$
+        //myself
+        setSelectByCondId("selectByCond");
+        setCountByCondId("countByCond");
+        setBaseCondListId("BASE_COND_LIST");
     }
 
     /**
@@ -1048,6 +1070,18 @@ public abstract class IntrospectedTable {
                 InternalAttribute.ATTR_COUNT_BY_EXAMPLE_STATEMENT_ID, s);
     }
 
+    public void setCountByCondId(String s) {
+        internalAttributes.put(InternalAttribute.ATTR_COUNT_BY_COND, s);
+    }
+
+    public void setBaseCondListId(String s) {
+        internalAttributes.put(InternalAttribute.ATTR_BASE_COND_LIST, s);
+    }
+
+    public void setSelectByCondId(String s) {
+        internalAttributes.put(InternalAttribute.ATTR_SELECT_BY_COND, s);
+    }
+
     /**
      * Gets the blob column list id.
      *
@@ -1281,7 +1315,67 @@ public abstract class IntrospectedTable {
 
         return sb.toString();
     }
-    
+
+    protected String calculateJavaClientServiceIInterfacePackage() {
+        JavaClientGeneratorConfiguration config = context.getJavaClientGeneratorConfiguration();
+        if (config == null) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        if (stringHasValue(config.getImplementationPackage())) {
+            sb.append(config.getImplementationPackage());
+        } else {
+            sb.append(config.getTargetPackage());
+        }
+
+        sb.append(fullyQualifiedTable.getSubPackage(isSubPackagesEnabled(config)));
+
+        String rootPackage = context.getProperty("rootPackage");
+        return StringUtils.substringBeforeLast(rootPackage, ".") + ".share."
+                + StringUtils.substringAfterLast(rootPackage, ".") + ".service";
+    }
+
+    protected String calculateJavaClientServiceImplementationPackage() {
+        JavaClientGeneratorConfiguration config = context.getJavaClientGeneratorConfiguration();
+        if (config == null) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        if (stringHasValue(config.getImplementationPackage())) {
+            sb.append(config.getImplementationPackage());
+        } else {
+            sb.append(config.getTargetPackage());
+        }
+
+        sb.append(fullyQualifiedTable.getSubPackage(isSubPackagesEnabled(config)));
+
+        String rootPackage = context.getProperty("rootPackage");
+        return rootPackage + ".service.impl";
+    }
+
+    protected String calculateJavaClientDTO() {
+        JavaClientGeneratorConfiguration config = context.getJavaClientGeneratorConfiguration();
+        if (config == null) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        if (stringHasValue(config.getImplementationPackage())) {
+            sb.append(config.getImplementationPackage());
+        } else {
+            sb.append(config.getTargetPackage());
+        }
+
+        sb.append(fullyQualifiedTable.getSubPackage(isSubPackagesEnabled(config)));
+
+        String rootPackage = context.getProperty("rootPackage");
+
+        return StringUtils.substringBeforeLast(rootPackage, ".") + ".share."
+                + StringUtils.substringAfterLast(rootPackage, ".") + ".dto";
+    }
+
     /**
      * Checks if is sub packages enabled.
      *
@@ -1338,8 +1432,9 @@ public abstract class IntrospectedTable {
         sb.setLength(0);
         sb.append(calculateJavaClientInterfacePackage());
         sb.append('.');
-        sb.append(fullyQualifiedTable.getDomainObjectName());
-        sb.append("Mapper"); //$NON-NLS-1$
+        sb.append(fullyQualifiedTable.getBusinessObjectName());
+        //Mapper->DAO
+        sb.append("DAO"); //$NON-NLS-1$
         setMyBatis3JavaMapperType(sb.toString());
 
         sb.setLength(0);
@@ -1348,6 +1443,35 @@ public abstract class IntrospectedTable {
         sb.append(fullyQualifiedTable.getDomainObjectName());
         sb.append("SqlProvider"); //$NON-NLS-1$
         setMyBatis3SqlProviderType(sb.toString());
+
+        /**
+         * DTO
+         */
+        sb.setLength(0);
+        sb.append(calculateJavaClientDTO());
+        sb.append('.');
+        sb.append(fullyQualifiedTable.getDomainTransferObjectName());
+        internalAttributes.put(InternalAttribute.ATTR_DTO_TYPE, sb.toString());
+
+        /**
+         * service 接口
+         */
+        sb.setLength(0);
+        sb.append(calculateJavaClientServiceIInterfacePackage());
+        sb.append('.');
+        sb.append(fullyQualifiedTable.getServiceInterfaceName());
+        internalAttributes.put(InternalAttribute.ATTR_SERVICE_INTERFACE_TYPE, sb.toString());
+
+        /**
+         * 接口实现
+         */
+        sb.setLength(0);
+        sb.append(calculateJavaClientServiceImplementationPackage());
+        sb.append('.');
+        sb.append(fullyQualifiedTable.getServiceImplName());
+        internalAttributes.put(InternalAttribute.ATTR_SERVICE_IMPL_TYPE, sb.toString());
+
+        //TODO:cj to be added
     }
 
     /**
