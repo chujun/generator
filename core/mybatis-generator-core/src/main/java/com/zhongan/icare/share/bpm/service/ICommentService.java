@@ -1,5 +1,6 @@
 package com.zhongan.icare.share.bpm.service;
 
+import com.zhongan.icare.bpm.bean.qso.CommentQSO;
 import com.zhongan.icare.share.bpm.dto.CommentDTO;
 import java.util.List;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -22,10 +23,10 @@ public interface ICommentService {
     int update(@RequestBody CommentDTO dto);
 
     @RequestMapping(path = "list",method={RequestMethod.POST})
-    List<CommentDTO> list(@RequestBody CommentDTO dto);
+    List<CommentDTO> list(@RequestBody CommentQSO qso);
 
     @RequestMapping(path = "count",method={RequestMethod.POST})
-    int count(@RequestBody CommentDTO dto);
+    int count(@RequestBody CommentQSO qso);
 
     @RequestMapping(path = "get/{id}",method={RequestMethod.GET})
     CommentDTO get(@PathVariable("id") long id);
