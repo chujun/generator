@@ -5,7 +5,7 @@ import com.zhongan.health.common.share.bean.BaseDTO;
 @lombok.Getter
 @lombok.Setter
 public class CommentDTO extends BaseDTO {
-    private static final long serialVersionUID = 1516693062563L;
+    private static final long serialVersionUID = 1516694380432L;
 
     /**
      * 评论信息

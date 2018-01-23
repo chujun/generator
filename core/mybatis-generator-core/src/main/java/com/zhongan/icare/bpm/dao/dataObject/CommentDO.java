@@ -5,7 +5,7 @@ import com.zhongan.health.common.share.bean.BaseDataObject;
 @lombok.Getter
 @lombok.Setter
 public class CommentDO extends BaseDataObject {
-    private static final long serialVersionUID = 1516693062539L;
+    private static final long serialVersionUID = 1516694380372L;
 
     /**
      * 评论信息

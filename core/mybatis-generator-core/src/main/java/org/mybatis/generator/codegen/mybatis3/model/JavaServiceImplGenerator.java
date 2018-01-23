@@ -24,6 +24,7 @@ import org.mybatis.generator.api.IntrospectedTable.InternalAttribute;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -60,15 +61,22 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
         serviceInterface.addImportedType(daoType);
         serviceInterface.addImportedType(FullyQualifiedJavaType.from(Autowired.class));
         serviceInterface
-                .addImportedType(new FullyQualifiedJavaType("org.springframework.web.bind.annotation.PathVariable"));
+                .addImportedType(FullyQualifiedJavaType.from(PathVariable.class));
         FullyQualifiedJavaType boType = new FullyQualifiedJavaType(
                 introspectedTable.getAttr(InternalAttribute.ATTR_BASE_RECORD_TYPE));
         FullyQualifiedJavaType dtoType = new FullyQualifiedJavaType(
                 introspectedTable.getAttr(InternalAttribute.ATTR_DTO_TYPE));
+        FullyQualifiedJavaType qsoType = new FullyQualifiedJavaType(
+                introspectedTable.getAttr(InternalAttribute.ATTR_QSO_TYPE));
+        FullyQualifiedJavaType qdoType = new FullyQualifiedJavaType(
+                introspectedTable.getAttr(InternalAttribute.ATTR_QDO_TYPE));
         FullyQualifiedJavaType listType = FullyQualifiedJavaType.getNewListInstance();
         serviceInterface.addImportedType(boType);
         serviceInterface.addImportedType(dtoType);
+        serviceInterface.addImportedType(qsoType);
+        serviceInterface.addImportedType(qdoType);
         serviceInterface.addImportedType(listType);
+
         serviceInterface.addImportedType(FullyQualifiedJavaType.from(Preconditions.class));
         //        serviceInterface.addImportedType(FullyQualifiedJavaType.from(BeanUtils.class));
         serviceInterface.addImportedType(
@@ -249,17 +257,18 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
             list.addTypeArgument(dtoType);
             method.setReturnType(list);
             method.setVisibility(JavaVisibility.PUBLIC);
-            Parameter param = new Parameter(dtoType, "dto");
+            Parameter param = new Parameter(qsoType, "qso");
             method.addParameter(param);
             if (microService) {
                 annotationRequestBody(param);
             }
 
-            method.addBodyLine("Preconditions.checkArgument(dto != null,\"查询条件不能为空.\");");
-            method.addBodyLine(doFromTransferDTO());
-            method.addBodyLine("dataobject.setIsDeleted(YesOrNo.NO.getValue());");
+            method.addBodyLine("Preconditions.checkArgument(qso != null,\"查询条件不能为空.\");");
+            //TODO:cj to do
+            method.addBodyLine(qsoToqdo(qdoType));
+            method.addBodyLine("qdo.setIsDeleted(YesOrNo.NO.getValue());");
             method.addBodyLine("List<" + table.getDomainObjectName() + "> dataobjects =  dao."
-                    + introspectedTable.getAttr(InternalAttribute.ATTR_SELECT_BY_COND) + "(dataobject);");
+                    + introspectedTable.getAttr(InternalAttribute.ATTR_SELECT_BY_COND) + "(qdo);");
             //            method.addBodyLine("return BeanUtils.simpleDOAndBOConvert(dataobjects, "
             //                    + table.getDomainTransferObjectName() + ".class,null);");
 
@@ -441,6 +450,12 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
         //        serviceInterface.addImportedType(FullyQualifiedJavaType.from(RequestMapping.class));
         serviceInterface.addAnnotation("@Service");
         serviceInterface.addAnnotation("@RestController");
+    }
+
+    private String qsoToqdo(FullyQualifiedJavaType qdoType){
+        StringBuffer sb = new StringBuffer(qdoType.getShortName());
+        sb.append(" qdo = to(qso);");
+        return sb.toString();
     }
 
     public String doFromTransferDTO() {

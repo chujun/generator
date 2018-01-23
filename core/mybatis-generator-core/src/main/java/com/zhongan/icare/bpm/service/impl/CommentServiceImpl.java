@@ -5,6 +5,8 @@ import com.google.common.collect.Lists;
 import com.zhongan.health.common.persistence.CommonFieldUtils;
 import com.zhongan.health.common.persistence.SequenceFactory;
 import com.zhongan.health.common.share.enm.YesOrNo;
+import com.zhongan.icare.bpm.bean.qdo.CommentQDO;
+import com.zhongan.icare.bpm.bean.qso.CommentQSO;
 import com.zhongan.icare.bpm.dao.CommentDAO;
 import com.zhongan.icare.bpm.dao.dataObject.CommentDO;
 import com.zhongan.icare.share.bpm.dto.CommentDTO;
@@ -98,11 +100,11 @@ class CommentServiceImpl implements ICommentService {
     }
 
     @Override
-    public List<CommentDTO> list(@RequestBody CommentDTO dto) {
-        Preconditions.checkArgument(dto != null,"查询条件不能为空.");
-        CommentDO dataobject=to(dto);
-        dataobject.setIsDeleted(YesOrNo.NO.getValue());
-        List<CommentDO> dataobjects =  dao.selectByCond(dataobject);
+    public List<CommentDTO> list(@RequestBody CommentQSO qso) {
+        Preconditions.checkArgument(qso != null,"查询条件不能为空.");
+        CommentQDO qdo = to(qso);
+        qdo.setIsDeleted(YesOrNo.NO.getValue());
+        List<CommentDO> dataobjects =  dao.selectByCond(qdo);
         return to(dataobjects);
     }
 
