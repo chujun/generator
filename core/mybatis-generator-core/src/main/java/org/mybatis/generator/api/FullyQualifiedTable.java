@@ -74,9 +74,19 @@ public class FullyQualifiedTable {
     private String  domainTransferObjectName;
 
     /**
+     * QSO名称
+     */
+    private String queryServiceObjectName;
+
+    /**
      * BO 名称
      */
     private String  businessObjectName;
+
+    /**
+     * QDO名称
+     */
+    private String queryDomainObjectName;
 
     /**
      * 服务接口
@@ -161,6 +171,8 @@ public class FullyQualifiedTable {
         domainTransferObjectName = businessObjectName + "DTO";
         serviceInterfaceName = "I" + businessObjectName + "Service";
         serviceImplName = businessObjectName + "ServiceImpl";
+        queryServiceObjectName = businessObjectName + "QSO";
+        queryDomainObjectName = businessObjectName + "QDO";
 
         if (alias == null) {
             this.alias = null;
@@ -447,5 +459,21 @@ public class FullyQualifiedTable {
 
     public void setDomainObjectName(String domainObjectName) {
         this.domainObjectName = domainObjectName;
+    }
+
+    public String getQueryServiceObjectName() {
+        return queryServiceObjectName;
+    }
+
+    public void setQueryServiceObjectName(String queryServiceObjectName) {
+        this.queryServiceObjectName = queryServiceObjectName;
+    }
+
+    public String getQueryDomainObjectName() {
+        return queryDomainObjectName;
+    }
+
+    public void setQueryDomainObjectName(String queryDomainObjectName) {
+        this.queryDomainObjectName = queryDomainObjectName;
     }
 }

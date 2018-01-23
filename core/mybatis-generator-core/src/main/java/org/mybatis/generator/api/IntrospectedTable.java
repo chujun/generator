@@ -56,16 +56,6 @@ public abstract class IntrospectedTable {
         ATTR_SERVICE_INTERFACE_TYPE,
         ATTR_SERVICE_IMPL_TYPE,
         ATTR_BUSINESS_OBJECT_TYPE,
-
-        /** The attr select all statement id. */
-        ATTR_SELECT_BY_COND,
-
-        /** The attr select all statement id. */
-        ATTR_COUNT_BY_COND,
-
-        ATTR_BASE_COND_LIST,
-
-        ATTR_DTO_TYPE,
         
         /** The attr dao implementation type. */
         ATTR_DAO_IMPLEMENTATION_TYPE,
@@ -184,6 +174,30 @@ public abstract class IntrospectedTable {
         ATTR_SERVICE_INTERFACE_FULL_NAME,
 
         ATTR_SERVICE_IMPL_FULL_NAME,
+
+        /** The attr select all statement id. */
+        ATTR_SELECT_BY_COND,
+
+        /** The attr select all statement id. */
+        ATTR_COUNT_BY_COND,
+
+        /** The attr where base condition query list id. */
+        ATTR_BASE_COND_LIST,
+
+        /**
+         * DTO bean
+         */
+        ATTR_DTO_TYPE,
+
+        /**
+         * QSO bean
+         */
+        ATTR_QSO_TYPE,
+
+        /**
+         * QDO bean
+         */
+        ATTR_QDO_TYPE,
     }
 
     /** The table configuration. */
@@ -1452,6 +1466,24 @@ public abstract class IntrospectedTable {
         sb.append('.');
         sb.append(fullyQualifiedTable.getDomainTransferObjectName());
         internalAttributes.put(InternalAttribute.ATTR_DTO_TYPE, sb.toString());
+
+        /**
+         * QSO
+         */
+        sb.setLength(0);
+        sb.append(calculateJavaClientDTO());
+        sb.append('.');
+        sb.append(fullyQualifiedTable.getQueryServiceObjectName());
+        internalAttributes.put(InternalAttribute.ATTR_QSO_TYPE, sb.toString());
+
+        /**
+         * QDO
+         */
+        sb.setLength(0);
+        sb.append(calculateJavaClientDTO());
+        sb.append('.');
+        sb.append(fullyQualifiedTable.getQueryDomainObjectName());
+        internalAttributes.put(InternalAttribute.ATTR_QDO_TYPE, sb.toString());
 
         /**
          * service 接口
