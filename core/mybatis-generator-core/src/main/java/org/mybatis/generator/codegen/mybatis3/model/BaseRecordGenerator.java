@@ -15,6 +15,7 @@
  */
 package org.mybatis.generator.codegen.mybatis3.model;
 
+import com.zhongan.health.common.utils.bean.annotation.Name;
 import org.mybatis.generator.api.CommentGenerator;
 import org.mybatis.generator.api.FullyQualifiedTable;
 import org.mybatis.generator.api.IntrospectedColumn;
@@ -26,7 +27,7 @@ import org.mybatis.generator.codegen.RootClassInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mybatis.generator.internal.util.JavaBeansUtil.*;
+import static org.mybatis.generator.internal.util.JavaBeansUtil.getJavaBeansField;
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 /**
@@ -53,8 +54,11 @@ public class BaseRecordGenerator extends AbstractJavaGenerator {
         TopLevelClass topLevelClass = new TopLevelClass(type);
         topLevelClass.setVisibility(JavaVisibility.PUBLIC);
         //modify
+        FullyQualifiedJavaType nameAnnotation = FullyQualifiedJavaType.from(Name.class);
         topLevelClass.addAnnotation("@lombok.Getter");
         topLevelClass.addAnnotation("@lombok.Setter");
+        topLevelClass.addAnnotation("@"+nameAnnotation.getShortName()+"(\""+table.getAliasedFullyQualifiedTableNameAtRuntime()+"\")");
+        topLevelClass.addImportedType(nameAnnotation);
         AbstractJavaGenerator.addUID(topLevelClass);
         commentGenerator.addJavaFileComment(topLevelClass);
 

@@ -1,11 +1,13 @@
 package com.zhongan.icare.bpm.dao.dataObject;
 
 import com.zhongan.health.common.share.bean.BaseDataObject;
+import com.zhongan.health.common.utils.bean.annotation.Name;
 
 @lombok.Getter
 @lombok.Setter
+@Name("act_my_process_sort")
 public class ProcessDefinitionSortDO extends BaseDataObject {
-    private static final long serialVersionUID = 1516705102392L;
+    private static final long serialVersionUID = 1516707676435L;
 
     /**
      * 分类名称
