@@ -141,7 +141,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
             method.addBodyLine("}");
             method.addBodyLine("CommonFieldUtils.populate(dataobject, true);");
             method.addBodyLine(
-                    "dao." + introspectedTable.getAttr(InternalAttribute.ATTR_INSERT_STATEMENT_ID) + "(dataobject);");
+                    "dao." + introspectedTable.getAttr(InternalAttribute.ATTR_INSERT_SELECTIVE_STATEMENT_ID) + "(dataobject);");
             method.addBodyLine("return id;");
             serviceInterface.addMethod(method);
         }

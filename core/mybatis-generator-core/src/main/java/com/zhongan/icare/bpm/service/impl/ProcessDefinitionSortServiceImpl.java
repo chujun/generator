@@ -5,12 +5,12 @@ import com.google.common.collect.Lists;
 import com.zhongan.health.common.persistence.CommonFieldUtils;
 import com.zhongan.health.common.persistence.SequenceFactory;
 import com.zhongan.health.common.share.enm.YesOrNo;
-import com.zhongan.icare.bpm.bean.qdo.CommentQDO;
-import com.zhongan.icare.bpm.dao.CommentDAO;
-import com.zhongan.icare.bpm.dao.dataObject.CommentDO;
-import com.zhongan.icare.share.bpm.bean.qso.CommentQSO;
-import com.zhongan.icare.share.bpm.dto.CommentDTO;
-import com.zhongan.icare.share.bpm.service.ICommentService;
+import com.zhongan.icare.bpm.bean.qdo.ProcessDefinitionSortQDO;
+import com.zhongan.icare.bpm.dao.ProcessDefinitionSortDAO;
+import com.zhongan.icare.bpm.dao.dataObject.ProcessDefinitionSortDO;
+import com.zhongan.icare.share.bpm.bean.qso.ProcessDefinitionSortQSO;
+import com.zhongan.icare.share.bpm.dto.ProcessDefinitionSortDTO;
+import com.zhongan.icare.share.bpm.service.IProcessDefinitionSortService;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,22 +21,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Service
 @RestController
-class CommentServiceImpl implements ICommentService {
+class ProcessDefinitionSortServiceImpl implements IProcessDefinitionSortService {
     @Autowired
-    CommentDAO dao;
+    ProcessDefinitionSortDAO dao;
 
     @Override
-    public long create(@RequestBody CommentDTO dto) {
+    public long create(@RequestBody ProcessDefinitionSortDTO dto) {
         Preconditions.checkArgument(dto != null,"dto不能为空.");
-        CommentDO dataobject=to(dto);
+        ProcessDefinitionSortDO dataobject=to(dto);
         Long id=dataobject.getId();
         if(id==null)
         {
-            id=SequenceFactory.nextId(CommentDO.class);
+            id=SequenceFactory.nextId(ProcessDefinitionSortDO.class);
             dataobject.setId(id);
         }
         CommonFieldUtils.populate(dataobject, true);
-        dao.insert(dataobject);
+        dao.insertSelective(dataobject);
         return id;
     }
 
@@ -48,47 +48,48 @@ class CommentServiceImpl implements ICommentService {
     }
 
     @Override
-    public int update(@RequestBody CommentDTO dto) {
+    public int update(@RequestBody ProcessDefinitionSortDTO dto) {
         Preconditions.checkArgument(dto != null&&dto.getId()!=null,"Id不能为空.");
-        CommentDO dataobject=to(dto);
+        ProcessDefinitionSortDO dataobject=to(dto);
         CommonFieldUtils.populate(dataobject, false);
         int cnt = dao.updateByPrimaryKeySelective(dataobject);
         return cnt;
     }
 
     @Override
-    public List<CommentDTO> list(@RequestBody CommentQSO qso) {
+    public List<ProcessDefinitionSortDTO> list(@RequestBody ProcessDefinitionSortQSO qso) {
         Preconditions.checkArgument(qso != null,"查询条件不能为空.");
-        CommentQDO qdo = buildCommentQDO(qso);
+        ProcessDefinitionSortQDO qdo = buildProcessDefinitionSortQDO(qso);
         qdo.setIsDeleted(YesOrNo.NO.getValue());
-        List<CommentDO> dataobjects =  dao.selectByCond(qdo);
+        List<ProcessDefinitionSortDO> dataobjects =  dao.selectByCond(qdo);
         return to(dataobjects);
     }
 
     @Override
-    public int count(@RequestBody CommentQSO qso) {
+    public int count(@RequestBody ProcessDefinitionSortQSO qso) {
         Preconditions.checkArgument(qso != null,"查询条件不能为空.");
-        CommentQDO qdo = buildCommentQDO(qso);
+        ProcessDefinitionSortQDO qdo = buildProcessDefinitionSortQDO(qso);
         qdo.setIsDeleted(YesOrNo.NO.getValue());
         int cnt = dao.countByCond(qdo);
         return cnt;
     }
 
     @Override
-    public CommentDTO get(@PathVariable("id") long id) {
+    public ProcessDefinitionSortDTO get(@PathVariable("id") long id) {
         Preconditions.checkArgument(id >0,"id必须大于0");
-        CommentDO dataobject =  dao.selectByPrimaryKey(id);
+        ProcessDefinitionSortDO dataobject =  dao.selectByPrimaryKey(id);
         return to(dataobject);
     }
 
-    private CommentDTO to(CommentDO d) {
-        CommentDTO t  = new CommentDTO();
+    private ProcessDefinitionSortDTO to(ProcessDefinitionSortDO d) {
+        ProcessDefinitionSortDTO t  = new ProcessDefinitionSortDTO();
         t.setId(d.getId());
-        t.setMessage(d.getMessage());
-        t.setTaskId(d.getTaskId());
-        t.setProcInstId(d.getProcInstId());
-        t.setProcDefKey(d.getProcDefKey());
-        t.setAction(d.getAction());
+        t.setName(d.getName());
+        t.setParentSortId(d.getParentSortId());
+        t.setLevel(d.getLevel());
+        t.setTenantId(d.getTenantId());
+        t.setDescription(d.getDescription());
+        t.setOaShow(d.getOaShow());
         if(StringUtils.isNotEmpty(d.getIsDeleted())){
             t.setIsDeleted(com.zhongan.health.common.utils.bean.enm.EnumUtils.byValue(d.getIsDeleted(),com.zhongan.health.common.share.enm.YesOrNo.class));
         }
@@ -96,26 +97,26 @@ class CommentServiceImpl implements ICommentService {
         t.setCreator(d.getCreator());
         t.setGmtCreated(d.getGmtCreated());
         t.setGmtModified(d.getGmtModified());
-        t.setAttachmentUrlJson(d.getAttachmentUrlJson());
         return t;
     }
 
-    private CommentDO to(CommentDTO t) {
-        CommentDO d = new CommentDO();
+    private ProcessDefinitionSortDO to(ProcessDefinitionSortDTO t) {
+        ProcessDefinitionSortDO d = new ProcessDefinitionSortDO();
         populate(d,t);
         return d;
     }
 
-    private void populate(CommentDO d, CommentDTO t) {
+    private void populate(ProcessDefinitionSortDO d, ProcessDefinitionSortDTO t) {
         if(null == d){
-            d = new CommentDO();
+            d = new ProcessDefinitionSortDO();
         }
         d.setId(t.getId());
-        d.setMessage(t.getMessage());
-        d.setTaskId(t.getTaskId());
-        d.setProcInstId(t.getProcInstId());
-        d.setProcDefKey(t.getProcDefKey());
-        d.setAction(t.getAction());
+        d.setName(t.getName());
+        d.setParentSortId(t.getParentSortId());
+        d.setLevel(t.getLevel());
+        d.setTenantId(t.getTenantId());
+        d.setDescription(t.getDescription());
+        d.setOaShow(t.getOaShow());
         if (t.getIsDeleted() != null){
             d.setIsDeleted(t.getIsDeleted().getValue());
         }
@@ -123,23 +124,22 @@ class CommentServiceImpl implements ICommentService {
         d.setCreator(t.getCreator());
         d.setGmtCreated(t.getGmtCreated());
         d.setGmtModified(t.getGmtModified());
-        d.setAttachmentUrlJson(t.getAttachmentUrlJson());
     }
 
-    private List<CommentDTO> to(List<CommentDO> dataobjects) {
+    private List<ProcessDefinitionSortDTO> to(List<ProcessDefinitionSortDO> dataobjects) {
         if(null == dataobjects){
             return null;
         }
-        List<CommentDTO> dtos=Lists.newArrayListWithCapacity(dataobjects.size());
-        for(CommentDO dataobject:dataobjects){dtos.add(to(dataobject));}
+        List<ProcessDefinitionSortDTO> dtos=Lists.newArrayListWithCapacity(dataobjects.size());
+        for(ProcessDefinitionSortDO dataobject:dataobjects){dtos.add(to(dataobject));}
         return dtos;
     }
 
-    private CommentQDO buildCommentQDO(CommentQSO qso) {
+    private ProcessDefinitionSortQDO buildProcessDefinitionSortQDO(ProcessDefinitionSortQSO qso) {
         if(null == qso){
             return null;
         }
-        CommentQDO result = new CommentQDO();
+        ProcessDefinitionSortQDO result = new ProcessDefinitionSortQDO();
         populate(result,qso);
         return result;
     }

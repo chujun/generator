@@ -1,7 +1,7 @@
 package com.zhongan.icare.share.bpm.service;
 
-import com.zhongan.icare.share.bpm.bean.qso.CommentQSO;
-import com.zhongan.icare.share.bpm.dto.CommentDTO;
+import com.zhongan.icare.share.bpm.bean.qso.ProcessDefinitionSortQSO;
+import com.zhongan.icare.share.bpm.dto.ProcessDefinitionSortDTO;
 import java.util.List;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,23 +11,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "icare-account")
-@RequestMapping(path = "/int/v1/comment")
-public interface ICommentService {
+@RequestMapping(path = "/int/v1/process/sort")
+public interface IProcessDefinitionSortService {
     @RequestMapping(path = "create",method={RequestMethod.POST})
-    long create(@RequestBody CommentDTO dto);
+    long create(@RequestBody ProcessDefinitionSortDTO dto);
 
     @RequestMapping(path = "delete/{id}",method={RequestMethod.DELETE})
     int delete(@PathVariable("id") long id);
 
     @RequestMapping(path = "update",method={RequestMethod.POST})
-    int update(@RequestBody CommentDTO dto);
+    int update(@RequestBody ProcessDefinitionSortDTO dto);
 
     @RequestMapping(path = "list",method={RequestMethod.POST})
-    List<CommentDTO> list(@RequestBody CommentQSO qso);
+    List<ProcessDefinitionSortDTO> list(@RequestBody ProcessDefinitionSortQSO qso);
 
     @RequestMapping(path = "count",method={RequestMethod.POST})
-    int count(@RequestBody CommentQSO qso);
+    int count(@RequestBody ProcessDefinitionSortQSO qso);
 
     @RequestMapping(path = "get/{id}",method={RequestMethod.GET})
-    CommentDTO get(@PathVariable("id") long id);
+    ProcessDefinitionSortDTO get(@PathVariable("id") long id);
 }
