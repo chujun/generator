@@ -115,6 +115,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
          */
         if (introspectedTable.getRules().generateInsert()) {
             Method method = new Method("create");
+            method.addAnnotation("@Override");
             method.setReturnType(FullyQualifiedJavaType.getPrimitiveLongInstance());
             method.setVisibility(JavaVisibility.PUBLIC);
             Parameter param = new Parameter(dtoType, "dto");
@@ -192,6 +193,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
 
         if (introspectedTable.getRules().generateDeleteByPrimaryKey()) {
             Method method = new Method("delete");
+            method.addAnnotation("@Override");
             method.setReturnType(FullyQualifiedJavaType.getIntInstance());
             method.setVisibility(JavaVisibility.PUBLIC);
             Parameter param = new Parameter(FullyQualifiedJavaType.getPrimitiveLongInstance(), "id");
@@ -215,6 +217,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
 
         if (introspectedTable.getRules().generateUpdateByPrimaryKeySelective()) {
             Method method = new Method("update");
+            method.addAnnotation("@Override");
             method.setReturnType(FullyQualifiedJavaType.getIntInstance());
             method.setVisibility(JavaVisibility.PUBLIC);
             Parameter param = new Parameter(dtoType, "dto");
@@ -241,6 +244,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
 
         if (introspectedTable.getRules().generateSelectByCond()) {
             Method method = new Method("list");
+            method.addAnnotation("@Override");
             FullyQualifiedJavaType list = FullyQualifiedJavaType.getNewListInstance();
             list.addTypeArgument(dtoType);
             method.setReturnType(list);
@@ -266,6 +270,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
 
         if (introspectedTable.getRules().generateCountByCond()) {
             Method method = new Method("count");
+            method.addAnnotation("@Override");
             method.setReturnType(FullyQualifiedJavaType.getIntInstance());
             method.setVisibility(JavaVisibility.PUBLIC);
             Parameter param = new Parameter(dtoType, "dto");
@@ -285,6 +290,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
 
         if (introspectedTable.getRules().generateSelectByPrimaryKey()) {
             Method method = new Method("get");
+            method.addAnnotation("@Override");
             method.setReturnType(dtoType);
             method.setVisibility(JavaVisibility.PUBLIC);
             Parameter param = new Parameter(FullyQualifiedJavaType.getPrimitiveLongInstance(), "id");

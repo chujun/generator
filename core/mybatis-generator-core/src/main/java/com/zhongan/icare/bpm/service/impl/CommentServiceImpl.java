@@ -66,6 +66,7 @@ class CommentServiceImpl implements ICommentService {
         return dtos;
     }
 
+    @Override
     public long create(@RequestBody CommentDTO dto) {
         Preconditions.checkArgument(dto != null,"dto不能为空.");
         CommentDO dataobject=to(dto);
@@ -80,12 +81,14 @@ class CommentServiceImpl implements ICommentService {
         return id;
     }
 
+    @Override
     public int delete(@PathVariable("id") long id) {
         Preconditions.checkArgument(id>0,"Id必须大于0");
         int cnt = dao.deleteByPrimaryKey(id);
         return cnt;
     }
 
+    @Override
     public int update(@RequestBody CommentDTO dto) {
         Preconditions.checkArgument(dto != null&&dto.getId()!=null,"Id不能为空.");
         CommentDO dataobject=to(dto);
@@ -94,6 +97,7 @@ class CommentServiceImpl implements ICommentService {
         return cnt;
     }
 
+    @Override
     public List<CommentDTO> list(@RequestBody CommentDTO dto) {
         Preconditions.checkArgument(dto != null,"查询条件不能为空.");
         CommentDO dataobject=to(dto);
@@ -102,6 +106,7 @@ class CommentServiceImpl implements ICommentService {
         return to(dataobjects);
     }
 
+    @Override
     public int count(@RequestBody CommentDTO dto) {
         Preconditions.checkArgument(dto != null,"查询条件不能为空.");
         CommentDO dataobject=to(dto);
@@ -110,6 +115,7 @@ class CommentServiceImpl implements ICommentService {
         return cnt;
     }
 
+    @Override
     public CommentDTO get(@PathVariable("id") long id) {
         Preconditions.checkArgument(id >0,"id必须大于0");
         CommentDO dataobject =  dao.selectByPrimaryKey(id);
