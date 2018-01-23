@@ -36,9 +36,8 @@ public class SelectByCondElementGenerator extends AbstractXmlElementGenerator {
         answer.addAttribute(new Attribute("id", introspectedTable.getAttr(InternalAttribute.ATTR_SELECT_BY_COND))); //$NON-NLS-1$
         answer.addAttribute(new Attribute("resultMap", //$NON-NLS-1$
                 introspectedTable.getBaseResultMapId()));
-        //TODO:cj to be modified
         answer.addAttribute(new Attribute("parameterType", //$NON-NLS-1$
-                introspectedTable.getAttr(InternalAttribute.ATTR_BASE_RECORD_TYPE)));
+                introspectedTable.getAttr(InternalAttribute.ATTR_QDO_TYPE)));
 
         StringBuilder sb = new StringBuilder();
         answer.addElement(new TextElement("select "));

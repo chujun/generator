@@ -38,7 +38,7 @@ public class CountByCondElementGenerator extends AbstractXmlElementGenerator {
         answer.addAttribute(new Attribute("resultType", //$NON-NLS-1$
                 "_int"));
         answer.addAttribute(new Attribute("parameterType", //$NON-NLS-1$
-                introspectedTable.getAttr(InternalAttribute.ATTR_BASE_RECORD_TYPE)));
+                introspectedTable.getAttr(InternalAttribute.ATTR_QDO_TYPE)));
 
         sb.append("select count(*) from "); //$NON-NLS-1$
         sb.append(introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime());
