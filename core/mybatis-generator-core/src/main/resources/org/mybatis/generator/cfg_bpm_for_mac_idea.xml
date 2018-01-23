@@ -80,11 +80,11 @@
 		<javaClientGenerator type="XMLMAPPER"
 			targetPackage="com.zhongan.icare.bpm.dao" targetProject="/Users/chujun/Documents/ideaspace/openSource/mybatis/generator/core/mybatis-generator-core/src/main/java">
 			<property name="enableSubPackages" value="true" />
-			<!-- <property name="rootInterface" value="com.zhongan.icare.common.dao.ICommonDAO" 
+			<!-- <property name="rootInterface" value="com.zhongan.icare.common.dao.ICommonDAO"
 				/> -->
 		</javaClientGenerator>
 
-		
+
 		 <table tableName='act_wo_comment' domainObjectName='CommentDO'
 			enableCountByExample='false' enableUpdateByExample='false'
 			enableDeleteByExample='false' enableSelectByExample='false'
@@ -104,7 +104,7 @@
 		<!--</table>-->
 
 
-		
+
 
 
 
