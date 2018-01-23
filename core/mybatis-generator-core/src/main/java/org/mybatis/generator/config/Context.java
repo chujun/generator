@@ -693,7 +693,7 @@ public class Context extends PropertyHolder {
                 callback.checkCancel();
 
                 /**
-                 * 将需要的属性进行初始化
+                 * 将需要的属性进行初始化,以供后用
                  */
                 introspectedTable.initialize();
 

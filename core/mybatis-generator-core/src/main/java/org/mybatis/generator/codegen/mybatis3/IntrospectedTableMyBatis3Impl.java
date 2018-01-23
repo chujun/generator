@@ -67,11 +67,18 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     @Override
     public void calculateGenerators(List<String> warnings,
             ProgressCallback progressCallback) {
+        /**
+         * 计算需要产生的java类
+         */
         calculateJavaModelGenerators(warnings, progressCallback);
-        
+        /**
+         * 计算生成的java dao类
+         */
         AbstractJavaClientGenerator javaClientGenerator =
             calculateClientGenerators(warnings, progressCallback);
-            
+        /**
+         * 计算mapper xml文件
+         */
         calculateXmlMapperGenerator(javaClientGenerator, warnings, progressCallback);
     }
 
@@ -193,13 +200,27 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
                     progressCallback);
             javaModelGenerators.add(javaGenerator);
         }
-        //TODO:cj to be added
+        //TODO:cj to be extended
         /**
          * DTO file
          */
         AbstractJavaGenerator dtoGenerator = new BaseDTORecordGenerator();
         initializeAbstractGenerator(dtoGenerator, warnings, progressCallback);
         javaModelGenerators.add(dtoGenerator);
+
+        /**
+         * QSO file
+         */
+        AbstractJavaGenerator qsoGenerator = new BaseQSORecordGenerator();
+        initializeAbstractGenerator(qsoGenerator, warnings, progressCallback);
+        javaModelGenerators.add(qsoGenerator);
+
+        /**
+         * QDO file
+         */
+        AbstractJavaGenerator qdoGenerator = new BaseQDORecordGenerator();
+        initializeAbstractGenerator(qdoGenerator, warnings, progressCallback);
+        javaModelGenerators.add(qdoGenerator);
 
         /**
          * java service interface

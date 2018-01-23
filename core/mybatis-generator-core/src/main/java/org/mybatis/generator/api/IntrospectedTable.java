@@ -788,8 +788,18 @@ public abstract class IntrospectedTable {
      * Initialize.
      */
     public void initialize() {
+
+        /**
+         * 初始化java类属性到internalAttributes中
+         */
         calculateJavaClientAttributes();
+        /**
+         * 初始化java dao接口属性到internalAttributes中
+         */
         calculateModelAttributes();
+        /**
+         * 初始化xml属性到internalAttributes中
+         */
         calculateXmlAttributes();
 
         if (tableConfiguration.getModelType() == ModelType.HIERARCHICAL) {
