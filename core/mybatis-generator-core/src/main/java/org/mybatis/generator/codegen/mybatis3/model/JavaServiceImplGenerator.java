@@ -16,6 +16,7 @@
 package org.mybatis.generator.codegen.mybatis3.model;
 
 import com.google.common.base.Preconditions;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.api.FullyQualifiedTable;
 import org.mybatis.generator.api.IntrospectedColumn;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mybatis.generator.internal.util.messages.Messages.getString;
@@ -349,6 +351,9 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
         do2dto.setStatic(false);
         do2dto.setReturnType(dtoType);
         do2dto.addParameter(new Parameter(doType, "d"));
+        do2dto.addBodyLine("if(null == d){");
+        do2dto.addBodyLine("return null;");
+        do2dto.addBodyLine("}");
         StringBuilder sb = new StringBuilder();
         sb.append(dtoType.getShortName());
         sb.append(" t ").append(" = ").append("new").append(" ").append(dtoType.getShortName()).append("();");
@@ -389,6 +394,8 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
 
         serviceInterface.addImportedType("com.google.common.collect.Lists");
         serviceInterface.addImportedType("org.apache.commons.lang3.StringUtils");
+        serviceInterface.addImportedType(FullyQualifiedJavaType.from(Collections.class));
+        serviceInterface.addImportedType(FullyQualifiedJavaType.from(CollectionUtils.class));
 
         Method do2dtos = new Method("to");
         serviceInterface.addMethod(do2dtos);
@@ -401,8 +408,8 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
         paramsType.addTypeArgument(doType);
         do2dtos.addParameter(new Parameter(paramsType, "dataobjects"));
 
-        do2dtos.addBodyLine("if(null == dataobjects){");
-        do2dtos.addBodyLine("return null;");
+        do2dtos.addBodyLine("if(CollectionUtils.isEmpty(dataobjects)){");
+        do2dtos.addBodyLine("return Collections.emptyList();");
         do2dtos.addBodyLine("}");
         StringBuilder dtos = new StringBuilder();
         dtos.append("List<").append(dtoType.getShortName()).append(">").append(' ').append("dtos=")

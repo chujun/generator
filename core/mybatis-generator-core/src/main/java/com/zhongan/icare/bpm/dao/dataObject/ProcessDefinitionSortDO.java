@@ -7,7 +7,7 @@ import com.zhongan.health.common.utils.bean.annotation.Name;
 @lombok.Setter
 @Name("act_my_process_sort")
 public class ProcessDefinitionSortDO extends BaseDataObject {
-    private static final long serialVersionUID = 1516707676435L;
+    private static final long serialVersionUID = 1516708234105L;
 
     /**
      * 分类名称
