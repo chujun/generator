@@ -16,6 +16,7 @@
 package org.mybatis.generator.codegen.mybatis3.xmlmapper.elements;
 
 import org.mybatis.generator.api.IntrospectedColumn;
+import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
@@ -98,5 +99,12 @@ public abstract class AbstractXmlElementGenerator extends AbstractGenerator {
         ifElement.addElement(includeElement);
 
         return ifElement;
+    }
+
+    protected XmlElement getBaseCondListElement() {
+        XmlElement answer = new XmlElement("include"); //$NON-NLS-1$
+        answer.addAttribute(new Attribute("refid", //$NON-NLS-1$
+                introspectedTable.getAttr(IntrospectedTable.InternalAttribute.ATTR_BASE_COND_LIST)));
+        return answer;
     }
 }

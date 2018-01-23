@@ -171,4 +171,24 @@ public class RulesDelegate implements Rules {
     public boolean generateJavaClient() {
         return rules.generateJavaClient();
     }
+
+    public boolean generateBaseCondList() {
+        return rules.generateBaseCondList();
+    }
+
+    public boolean generateSelectByCond() {
+        return rules.generateSelectByCond();
+    }
+
+    public boolean generateCountByCond() {
+        return rules.generateCountByCond();
+    }
+
+    public boolean enableCache() {
+        return rules.enableCache();
+    }
+
+    public String cacheTime() {
+        return rules.cacheTime();
+    }
 }

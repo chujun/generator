@@ -15,23 +15,14 @@
  */
 package org.mybatis.generator.internal;
 
-import static org.mybatis.generator.internal.util.messages.Messages.getString;
+import org.mybatis.generator.exception.ShellException;
+import org.w3c.dom.*;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Method;
 
-import org.mybatis.generator.exception.ShellException;
-import org.w3c.dom.Attr;
-import org.w3c.dom.CDATASection;
-import org.w3c.dom.Comment;
-import org.w3c.dom.Document;
-import org.w3c.dom.DocumentType;
-import org.w3c.dom.Element;
-import org.w3c.dom.EntityReference;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.ProcessingInstruction;
-import org.w3c.dom.Text;
+import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 /**
  * This class is used to generate a String representation of an XML document. It
@@ -212,8 +203,21 @@ public class DomWriter {
         if (document == null) {
             return null;
         }
-        
-        return document.getXmlVersion();
+        String version = null;
+        Method getXMLVersion = null;
+        try {
+            getXMLVersion = document.getClass().getMethod("getXmlVersion", //$NON-NLS-1$
+                    new Class[] {});
+            // If Document class implements DOM L3, this method will exist.
+            if (getXMLVersion != null) {
+                version = (String) getXMLVersion.invoke(document,
+                        (Object[]) null);
+            }
+        } catch (Exception e) {
+            // Either this locator object doesn't have
+            // this method, or we're on an old JDK.
+        }
+        return version;
     }
 
     /**
