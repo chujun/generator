@@ -23,6 +23,7 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.IntrospectedTable.InternalAttribute;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,10 +55,10 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
 
         FullyQualifiedJavaType daoType = new FullyQualifiedJavaType(introspectedTable.getMyBatis3JavaMapperType());
         Field daoField = new Field("dao", daoType);
-        daoField.addAnnotation("@Resource");
+        daoField.addAnnotation("@Autowired");
         serviceInterface.addField(daoField);
         serviceInterface.addImportedType(daoType);
-        serviceInterface.addImportedType(FullyQualifiedJavaType.from(javax.annotation.Resource.class));
+        serviceInterface.addImportedType(FullyQualifiedJavaType.from(Autowired.class));
         serviceInterface
                 .addImportedType(new FullyQualifiedJavaType("org.springframework.web.bind.annotation.PathVariable"));
         FullyQualifiedJavaType boType = new FullyQualifiedJavaType(
