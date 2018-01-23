@@ -1379,6 +1379,44 @@ public abstract class IntrospectedTable {
         return rootPackage + ".service.impl";
     }
 
+    protected String calculateJavaClientQSOPackage(){
+        JavaClientGeneratorConfiguration config = context.getJavaClientGeneratorConfiguration();
+        if (config == null) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        if (stringHasValue(config.getImplementationPackage())) {
+            sb.append(config.getImplementationPackage());
+        } else {
+            sb.append(config.getTargetPackage());
+        }
+
+        sb.append(fullyQualifiedTable.getSubPackage(isSubPackagesEnabled(config)));
+
+        String rootPackage = context.getProperty("rootPackage");
+        return rootPackage + ".bean.qso";
+    }
+
+    protected String calculateJavaClientQDOPackage(){
+        JavaClientGeneratorConfiguration config = context.getJavaClientGeneratorConfiguration();
+        if (config == null) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        if (stringHasValue(config.getImplementationPackage())) {
+            sb.append(config.getImplementationPackage());
+        } else {
+            sb.append(config.getTargetPackage());
+        }
+
+        sb.append(fullyQualifiedTable.getSubPackage(isSubPackagesEnabled(config)));
+
+        String rootPackage = context.getProperty("rootPackage");
+        return rootPackage + ".bean.qdo";
+    }
+
     protected String calculateJavaClientDTO() {
         JavaClientGeneratorConfiguration config = context.getJavaClientGeneratorConfiguration();
         if (config == null) {
@@ -1468,8 +1506,9 @@ public abstract class IntrospectedTable {
         sb.append("SqlProvider"); //$NON-NLS-1$
         setMyBatis3SqlProviderType(sb.toString());
 
+        //TODO:cj to be extended
         /**
-         * DTO
+         * DTO 全类名
          */
         sb.setLength(0);
         sb.append(calculateJavaClientDTO());
@@ -1478,25 +1517,25 @@ public abstract class IntrospectedTable {
         internalAttributes.put(InternalAttribute.ATTR_DTO_TYPE, sb.toString());
 
         /**
-         * QSO
+         * QSO 全类名
          */
         sb.setLength(0);
-        sb.append(calculateJavaClientDTO());
+        sb.append(calculateJavaClientQSOPackage());
         sb.append('.');
         sb.append(fullyQualifiedTable.getQueryServiceObjectName());
         internalAttributes.put(InternalAttribute.ATTR_QSO_TYPE, sb.toString());
 
         /**
-         * QDO
+         * QDO 全类名
          */
         sb.setLength(0);
-        sb.append(calculateJavaClientDTO());
+        sb.append(calculateJavaClientQDOPackage());
         sb.append('.');
         sb.append(fullyQualifiedTable.getQueryDomainObjectName());
         internalAttributes.put(InternalAttribute.ATTR_QDO_TYPE, sb.toString());
 
         /**
-         * service 接口
+         * service 接口 全类名
          */
         sb.setLength(0);
         sb.append(calculateJavaClientServiceIInterfacePackage());
@@ -1505,7 +1544,7 @@ public abstract class IntrospectedTable {
         internalAttributes.put(InternalAttribute.ATTR_SERVICE_INTERFACE_TYPE, sb.toString());
 
         /**
-         * 接口实现
+         * 接口实现 全类名
          */
         sb.setLength(0);
         sb.append(calculateJavaClientServiceImplementationPackage());
@@ -1513,7 +1552,7 @@ public abstract class IntrospectedTable {
         sb.append(fullyQualifiedTable.getServiceImplName());
         internalAttributes.put(InternalAttribute.ATTR_SERVICE_IMPL_TYPE, sb.toString());
 
-        //TODO:cj to be added
+
     }
 
     /**

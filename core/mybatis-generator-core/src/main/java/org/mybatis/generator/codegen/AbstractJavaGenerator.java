@@ -15,6 +15,7 @@
  */
 package org.mybatis.generator.codegen;
 
+import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.config.PropertyRegistry;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -67,6 +68,14 @@ public abstract class AbstractJavaGenerator extends AbstractGenerator {
         }
 
         return rootClass;
+    }
+
+    public String getQDORootClass() {
+        return introspectedTable.getAttr(IntrospectedTable.InternalAttribute.ATTR_BASE_RECORD_TYPE);
+    }
+
+    public String getQSORootClass() {
+        return introspectedTable.getAttr(IntrospectedTable.InternalAttribute.ATTR_DTO_TYPE);
     }
 
     public String getDTORootClass() {
