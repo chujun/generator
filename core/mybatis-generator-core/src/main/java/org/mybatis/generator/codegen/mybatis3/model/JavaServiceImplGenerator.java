@@ -341,7 +341,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
             String getMethod = getMethodName(column);
             StringBuilder tl = new StringBuilder();
             if (isDeleted) {
-                do2dto.addBodyLine(" if(StringUtils.isNotEmpty(dataobject.getIsDeleted()))");
+                do2dto.addBodyLine(" if(StringUtils.isNotEmpty(d.getIsDeleted()))");
             }
             tl.append("t.").append(setMethod).append('(');
             if (isDeleted) {
