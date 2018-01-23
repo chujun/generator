@@ -104,6 +104,9 @@ public class JavaMapperGenerator extends AbstractJavaClientGenerator {
         addUpdateByPrimaryKeyWithBLOBsMethod(interfaze);
         addUpdateByPrimaryKeyWithoutBLOBsMethod(interfaze);
 
+        addSelectByCondMethod(interfaze);
+        addCountByCondMethod(interfaze);
+
         List<CompilationUnit> answer = new ArrayList<CompilationUnit>();
         if (context.getPlugins().clientGenerated(interfaze, null,
                 introspectedTable)) {
@@ -121,6 +124,20 @@ public class JavaMapperGenerator extends AbstractJavaClientGenerator {
     protected void addCountByExampleMethod(Interface interfaze) {
         if (introspectedTable.getRules().generateCountByExample()) {
             AbstractJavaMapperMethodGenerator methodGenerator = new CountByExampleMethodGenerator();
+            initializeAndExecuteGenerator(methodGenerator, interfaze);
+        }
+    }
+
+    protected void addCountByCondMethod(Interface interfaze) {
+        if (introspectedTable.getRules().generateCountByCond()) {
+            AbstractJavaMapperMethodGenerator methodGenerator = new CountByCondMethodGenerator();
+            initializeAndExecuteGenerator(methodGenerator, interfaze);
+        }
+    }
+
+    protected void addSelectByCondMethod(Interface interfaze) {
+        if (introspectedTable.getRules().generateSelectByCond()) {
+            AbstractJavaMapperMethodGenerator methodGenerator = new SelectByCondMethodGenerator();
             initializeAndExecuteGenerator(methodGenerator, interfaze);
         }
     }
