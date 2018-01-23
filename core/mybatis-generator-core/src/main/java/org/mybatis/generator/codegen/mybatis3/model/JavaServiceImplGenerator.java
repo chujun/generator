@@ -90,7 +90,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
             addMicroAnnotation(serviceInterface);
         }
 
-        generateDtoDoMapper(introspectedTable, serviceInterface, boType, dtoType);
+        generateDtoDoMapper(introspectedTable, serviceInterface, boType, dtoType,qsoType,qdoType);
 
         if (cache) {
             /**
@@ -265,7 +265,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
 
             method.addBodyLine("Preconditions.checkArgument(qso != null,\"查询条件不能为空.\");");
             //TODO:cj to do
-            method.addBodyLine(qsoToqdo(qdoType));
+            method.addBodyLine(qsoToqdo());
             method.addBodyLine("qdo.setIsDeleted(YesOrNo.NO.getValue());");
             method.addBodyLine("List<" + table.getDomainObjectName() + "> dataobjects =  dao."
                     + introspectedTable.getAttr(InternalAttribute.ATTR_SELECT_BY_COND) + "(qdo);");
@@ -282,17 +282,17 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
             method.addAnnotation("@Override");
             method.setReturnType(FullyQualifiedJavaType.getIntInstance());
             method.setVisibility(JavaVisibility.PUBLIC);
-            Parameter param = new Parameter(dtoType, "dto");
+            Parameter param = new Parameter(qsoType, "qso");
             method.addParameter(param);
             if (microService) {
                 annotationRequestBody(param);
             }
 
-            method.addBodyLine("Preconditions.checkArgument(dto != null,\"查询条件不能为空.\");");
-            method.addBodyLine(doFromTransferDTO());
-            method.addBodyLine("dataobject.setIsDeleted(YesOrNo.NO.getValue());");
+            method.addBodyLine("Preconditions.checkArgument(qso != null,\"查询条件不能为空.\");");
+            method.addBodyLine(qsoToqdo());
+            method.addBodyLine("qdo.setIsDeleted(YesOrNo.NO.getValue());");
             method.addBodyLine("int cnt = dao." + introspectedTable.getAttr(InternalAttribute.ATTR_COUNT_BY_COND)
-                    + "(dataobject);");
+                    + "(qdo);");
             method.addBodyLine("return cnt;");
             serviceInterface.addMethod(method);
         }
@@ -341,7 +341,8 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
     }
 
     private void generateDtoDoMapper(IntrospectedTable introspectedTable, TopLevelClass serviceInterface,
-                                     FullyQualifiedJavaType doType, FullyQualifiedJavaType dtoType) {
+                                     FullyQualifiedJavaType doType, FullyQualifiedJavaType dtoType,
+                                     FullyQualifiedJavaType qsoType,FullyQualifiedJavaType qdoType) {
         Method do2dto = new Method("to");
         do2dto.setVisibility(JavaVisibility.PUBLIC);
         do2dto.setStatic(true);
@@ -357,7 +358,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
             String getMethod = getMethodName(column);
             StringBuilder tl = new StringBuilder();
             if (isDeleted) {
-                do2dto.addBodyLine(" if(StringUtils.isNotEmpty(d.getIsDeleted()))");
+                do2dto.addBodyLine("if(StringUtils.isNotEmpty(d.getIsDeleted())){");
             }
             tl.append("t.").append(setMethod).append('(');
             if (isDeleted) {
@@ -371,39 +372,21 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
             }
             tl.append(')').append(';');
             do2dto.addBodyLine(tl.toString());
+            if(isDeleted){
+                do2dto.addBodyLine("}");
+            }
         }
         do2dto.addBodyLine("return t;");
 
         serviceInterface.addMethod(do2dto);
 
-        Method dto2do = new Method("to");
-        dto2do.setVisibility(JavaVisibility.PUBLIC);
-        dto2do.setStatic(true);
-        dto2do.setReturnType(doType);
-        dto2do.addParameter(new Parameter(dtoType, "t"));
-        StringBuilder sb1 = new StringBuilder();
-        sb1.append(doType.getShortName());
-        sb1.append(" d ").append(" = ").append("new").append(" ").append(doType.getShortName()).append("();");
-        dto2do.addBodyLine(sb1.toString());
-        for (IntrospectedColumn column : introspectedTable.getAllColumns()) {
-            boolean isDeleted = column.getJavaProperty().equalsIgnoreCase("isDeleted");
 
-            String setMethod = setMethodName(column);
-            String getMethod = getMethodName(column);
-            StringBuilder tl = new StringBuilder();
-            if (isDeleted) {
-                dto2do.addBodyLine("if (t.getIsDeleted() != null)");
-            }
-            tl.append("d.").append(setMethod).append('(');
-            tl.append("t").append('.').append(getMethod).append("()");
-            if (isDeleted) {
-                tl.append(".getValue()");
-            }
-            tl.append(')').append(';');
-            dto2do.addBodyLine(tl.toString());
-        }
-        dto2do.addBodyLine("return d;");
+        Method dto2do = generateDTO2DOMethod(doType, dtoType);
         serviceInterface.addMethod(dto2do);
+
+        //populate()
+        Method populate = generatePopulateMethod(introspectedTable, doType, dtoType);
+        serviceInterface.addMethod(populate);
 
         serviceInterface.addImportedType("com.google.common.collect.Lists");
         serviceInterface.addImportedType("org.apache.commons.lang3.StringUtils");
@@ -419,7 +402,9 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
         paramsType.addTypeArgument(doType);
         do2dtos.addParameter(new Parameter(paramsType, "dataobjects"));
 
-        do2dtos.addBodyLine("if(dataobjects==null) return null;");
+        do2dtos.addBodyLine("if(null == dataobjects){");
+        do2dtos.addBodyLine("return null;");
+        do2dtos.addBodyLine("}");
         StringBuilder dtos = new StringBuilder();
         dtos.append("List<").append(dtoType.getShortName()).append(">").append(' ').append("dtos=")
                 .append("Lists.newArrayListWithCapacity(dataobjects.size());");
@@ -430,6 +415,69 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
                 .append("dtos.add(to(dataobject));").append('}');
         do2dtos.addBodyLine(iterLine.toString());
         do2dtos.addBodyLine("return dtos;");
+
+        //buildXXXQDO
+        Method qso2qdo = generateBuildQDOFromQSOMethod(qsoType, qdoType);
+        serviceInterface.addMethod(qso2qdo);
+    }
+
+    private Method generateDTO2DOMethod(FullyQualifiedJavaType doType, FullyQualifiedJavaType dtoType) {
+        Method dto2do = new Method("to");
+        dto2do.setVisibility(JavaVisibility.PRIVATE);
+        dto2do.setStatic(false);
+        dto2do.setReturnType(doType);
+        dto2do.addParameter(new Parameter(dtoType,"t"));
+        dto2do.addBodyLine(doType.getShortName()+" d = new "+doType.getShortName()+"();");
+        dto2do.addBodyLine("populate(d,t);");
+        dto2do.addBodyLine("return d;");
+        return dto2do;
+    }
+
+    private Method generatePopulateMethod(IntrospectedTable introspectedTable, FullyQualifiedJavaType doType, FullyQualifiedJavaType dtoType) {
+        Method dto2do = new Method("populate");
+        dto2do.setVisibility(JavaVisibility.PRIVATE);
+        dto2do.setStatic(false);
+        dto2do.addParameter(new Parameter(doType, "d"));
+        dto2do.addParameter(new Parameter(dtoType, "t"));
+        dto2do.addBodyLine("if(null == d){");
+        dto2do.addBodyLine("d = new "+doType.getShortName()+"();");
+        dto2do.addBodyLine("}");
+        for (IntrospectedColumn column : introspectedTable.getAllColumns()) {
+            boolean isDeleted = column.getJavaProperty().equalsIgnoreCase("isDeleted");
+
+            String setMethod = setMethodName(column);
+            String getMethod = getMethodName(column);
+            StringBuilder tl = new StringBuilder();
+            if (isDeleted) {
+                dto2do.addBodyLine("if (t.getIsDeleted() != null){");
+            }
+            tl.append("d.").append(setMethod).append('(');
+            tl.append("t").append('.').append(getMethod).append("()");
+            if (isDeleted) {
+                tl.append(".getValue()");
+            }
+            tl.append(')').append(';');
+            dto2do.addBodyLine(tl.toString());
+            if(isDeleted){
+                dto2do.addBodyLine("}");
+            }
+        }
+        return dto2do;
+    }
+
+    private Method generateBuildQDOFromQSOMethod(FullyQualifiedJavaType qsoType, FullyQualifiedJavaType qdoType) {
+        Method qso2qdo = new Method("build"+getDomainObjectName()+"QDO");
+        qso2qdo.setVisibility(JavaVisibility.PRIVATE);
+        qso2qdo.setStatic(false);
+        qso2qdo.setReturnType(qdoType);
+        qso2qdo.addParameter(new Parameter(qsoType,"qso"));
+        qso2qdo.addBodyLine("if(null == qso){");
+        qso2qdo.addBodyLine("return null;");
+        qso2qdo.addBodyLine("}");
+        qso2qdo.addBodyLine(qdoType.getShortName()+" result = new "+qdoType.getShortName()+"();");
+        qso2qdo.addBodyLine("populate(result,qso);");
+        qso2qdo.addBodyLine("return result;");
+        return qso2qdo;
     }
 
     public static String getMethodName(IntrospectedColumn column) {
@@ -452,9 +500,10 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
         serviceInterface.addAnnotation("@RestController");
     }
 
-    private String qsoToqdo(FullyQualifiedJavaType qdoType){
-        StringBuffer sb = new StringBuffer(qdoType.getShortName());
-        sb.append(" qdo = to(qso);");
+    private String qsoToqdo(){
+        StringBuffer sb = new StringBuffer(getQDOType().getShortName());
+
+        sb.append(" qdo = build").append(getDomainObjectName()).append("QDO(qso);");
         return sb.toString();
     }
 
@@ -505,7 +554,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
 
     /**
      * 微服务全路径
-     * 
+     *
      * @return
      */
     protected String microFullPath() {
@@ -587,5 +636,18 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
         }
 
         return introspectedColumns;
+    }
+
+    private String getDomainObjectName(){
+        String domainObjectName = introspectedTable.getFullyQualifiedTable().getDomainObjectName();
+        if(StringUtils.isNotEmpty(domainObjectName) && domainObjectName.endsWith("DO")){
+            return domainObjectName.substring(0,domainObjectName.length()-2);
+        }
+        return domainObjectName;
+    }
+
+    private FullyQualifiedJavaType getQDOType(){
+        return new FullyQualifiedJavaType(
+                introspectedTable.getAttr(InternalAttribute.ATTR_QDO_TYPE));
     }
 }

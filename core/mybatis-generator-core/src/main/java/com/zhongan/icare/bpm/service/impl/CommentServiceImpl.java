@@ -33,8 +33,9 @@ class CommentServiceImpl implements ICommentService {
         t.setProcInstId(d.getProcInstId());
         t.setProcDefKey(d.getProcDefKey());
         t.setAction(d.getAction());
-         if(StringUtils.isNotEmpty(d.getIsDeleted()))
-        t.setIsDeleted(com.zhongan.health.common.utils.bean.enm.EnumUtils.byValue(d.getIsDeleted(),com.zhongan.health.common.share.enm.YesOrNo.class));
+         if(StringUtils.isNotEmpty(d.getIsDeleted())){
+            t.setIsDeleted(com.zhongan.health.common.utils.bean.enm.EnumUtils.byValue(d.getIsDeleted(),com.zhongan.health.common.share.enm.YesOrNo.class));
+        }
         t.setModifier(d.getModifier());
         t.setCreator(d.getCreator());
         t.setGmtCreated(d.getGmtCreated());
@@ -43,29 +44,48 @@ class CommentServiceImpl implements ICommentService {
         return t;
     }
 
-    public static CommentDO to(CommentDTO t) {
-        CommentDO d  = new CommentDO();
+    private CommentDO to(CommentDTO t) {
+        CommentDO d = new CommentDO();
+        populate(d,t);
+        return d;
+    }
+
+    private void populate(CommentDO d, CommentDTO t) {
+        if(null == d){
+            d = new CommentDO();
+        }
         d.setId(t.getId());
         d.setMessage(t.getMessage());
         d.setTaskId(t.getTaskId());
         d.setProcInstId(t.getProcInstId());
         d.setProcDefKey(t.getProcDefKey());
         d.setAction(t.getAction());
-        if (t.getIsDeleted() != null)
-        d.setIsDeleted(t.getIsDeleted().getValue());
+        if (t.getIsDeleted() != null){
+            d.setIsDeleted(t.getIsDeleted().getValue());
+        }
         d.setModifier(t.getModifier());
         d.setCreator(t.getCreator());
         d.setGmtCreated(t.getGmtCreated());
         d.setGmtModified(t.getGmtModified());
         d.setAttachmentUrlJson(t.getAttachmentUrlJson());
-        return d;
     }
 
     public static List<CommentDTO> to(List<CommentDO> dataobjects) {
-        if(dataobjects==null) return null;
+        if(null == dataobjects){
+            return null;
+        }
         List<CommentDTO> dtos=Lists.newArrayListWithCapacity(dataobjects.size());
         for(CommentDO dataobject:dataobjects){dtos.add(to(dataobject));}
         return dtos;
+    }
+
+    private CommentQDO buildCommentQDO(CommentQSO qso) {
+        if(null == qso){
+            return null;
+        }
+        CommentQDO result = new CommentQDO();
+        populate(result,qso);
+        return result;
     }
 
     @Override
@@ -102,18 +122,18 @@ class CommentServiceImpl implements ICommentService {
     @Override
     public List<CommentDTO> list(@RequestBody CommentQSO qso) {
         Preconditions.checkArgument(qso != null,"查询条件不能为空.");
-        CommentQDO qdo = to(qso);
+        CommentQDO qdo = buildCommentQDO(qso);
         qdo.setIsDeleted(YesOrNo.NO.getValue());
         List<CommentDO> dataobjects =  dao.selectByCond(qdo);
         return to(dataobjects);
     }
 
     @Override
-    public int count(@RequestBody CommentDTO dto) {
-        Preconditions.checkArgument(dto != null,"查询条件不能为空.");
-        CommentDO dataobject=to(dto);
-        dataobject.setIsDeleted(YesOrNo.NO.getValue());
-        int cnt = dao.countByCond(dataobject);
+    public int count(@RequestBody CommentQSO qso) {
+        Preconditions.checkArgument(qso != null,"查询条件不能为空.");
+        CommentQDO qdo = buildCommentQDO(qso);
+        qdo.setIsDeleted(YesOrNo.NO.getValue());
+        int cnt = dao.countByCond(qdo);
         return cnt;
     }
 
