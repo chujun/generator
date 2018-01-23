@@ -25,69 +25,6 @@ class CommentServiceImpl implements ICommentService {
     @Autowired
     CommentDAO dao;
 
-    public static CommentDTO to(CommentDO d) {
-        CommentDTO t  = new CommentDTO();
-        t.setId(d.getId());
-        t.setMessage(d.getMessage());
-        t.setTaskId(d.getTaskId());
-        t.setProcInstId(d.getProcInstId());
-        t.setProcDefKey(d.getProcDefKey());
-        t.setAction(d.getAction());
-         if(StringUtils.isNotEmpty(d.getIsDeleted())){
-            t.setIsDeleted(com.zhongan.health.common.utils.bean.enm.EnumUtils.byValue(d.getIsDeleted(),com.zhongan.health.common.share.enm.YesOrNo.class));
-        }
-        t.setModifier(d.getModifier());
-        t.setCreator(d.getCreator());
-        t.setGmtCreated(d.getGmtCreated());
-        t.setGmtModified(d.getGmtModified());
-        t.setAttachmentUrlJson(d.getAttachmentUrlJson());
-        return t;
-    }
-
-    private CommentDO to(CommentDTO t) {
-        CommentDO d = new CommentDO();
-        populate(d,t);
-        return d;
-    }
-
-    private void populate(CommentDO d, CommentDTO t) {
-        if(null == d){
-            d = new CommentDO();
-        }
-        d.setId(t.getId());
-        d.setMessage(t.getMessage());
-        d.setTaskId(t.getTaskId());
-        d.setProcInstId(t.getProcInstId());
-        d.setProcDefKey(t.getProcDefKey());
-        d.setAction(t.getAction());
-        if (t.getIsDeleted() != null){
-            d.setIsDeleted(t.getIsDeleted().getValue());
-        }
-        d.setModifier(t.getModifier());
-        d.setCreator(t.getCreator());
-        d.setGmtCreated(t.getGmtCreated());
-        d.setGmtModified(t.getGmtModified());
-        d.setAttachmentUrlJson(t.getAttachmentUrlJson());
-    }
-
-    public static List<CommentDTO> to(List<CommentDO> dataobjects) {
-        if(null == dataobjects){
-            return null;
-        }
-        List<CommentDTO> dtos=Lists.newArrayListWithCapacity(dataobjects.size());
-        for(CommentDO dataobject:dataobjects){dtos.add(to(dataobject));}
-        return dtos;
-    }
-
-    private CommentQDO buildCommentQDO(CommentQSO qso) {
-        if(null == qso){
-            return null;
-        }
-        CommentQDO result = new CommentQDO();
-        populate(result,qso);
-        return result;
-    }
-
     @Override
     public long create(@RequestBody CommentDTO dto) {
         Preconditions.checkArgument(dto != null,"dto不能为空.");
@@ -142,5 +79,68 @@ class CommentServiceImpl implements ICommentService {
         Preconditions.checkArgument(id >0,"id必须大于0");
         CommentDO dataobject =  dao.selectByPrimaryKey(id);
         return to(dataobject);
+    }
+
+    private CommentDTO to(CommentDO d) {
+        CommentDTO t  = new CommentDTO();
+        t.setId(d.getId());
+        t.setMessage(d.getMessage());
+        t.setTaskId(d.getTaskId());
+        t.setProcInstId(d.getProcInstId());
+        t.setProcDefKey(d.getProcDefKey());
+        t.setAction(d.getAction());
+        if(StringUtils.isNotEmpty(d.getIsDeleted())){
+            t.setIsDeleted(com.zhongan.health.common.utils.bean.enm.EnumUtils.byValue(d.getIsDeleted(),com.zhongan.health.common.share.enm.YesOrNo.class));
+        }
+        t.setModifier(d.getModifier());
+        t.setCreator(d.getCreator());
+        t.setGmtCreated(d.getGmtCreated());
+        t.setGmtModified(d.getGmtModified());
+        t.setAttachmentUrlJson(d.getAttachmentUrlJson());
+        return t;
+    }
+
+    private CommentDO to(CommentDTO t) {
+        CommentDO d = new CommentDO();
+        populate(d,t);
+        return d;
+    }
+
+    private void populate(CommentDO d, CommentDTO t) {
+        if(null == d){
+            d = new CommentDO();
+        }
+        d.setId(t.getId());
+        d.setMessage(t.getMessage());
+        d.setTaskId(t.getTaskId());
+        d.setProcInstId(t.getProcInstId());
+        d.setProcDefKey(t.getProcDefKey());
+        d.setAction(t.getAction());
+        if (t.getIsDeleted() != null){
+            d.setIsDeleted(t.getIsDeleted().getValue());
+        }
+        d.setModifier(t.getModifier());
+        d.setCreator(t.getCreator());
+        d.setGmtCreated(t.getGmtCreated());
+        d.setGmtModified(t.getGmtModified());
+        d.setAttachmentUrlJson(t.getAttachmentUrlJson());
+    }
+
+    private List<CommentDTO> to(List<CommentDO> dataobjects) {
+        if(null == dataobjects){
+            return null;
+        }
+        List<CommentDTO> dtos=Lists.newArrayListWithCapacity(dataobjects.size());
+        for(CommentDO dataobject:dataobjects){dtos.add(to(dataobject));}
+        return dtos;
+    }
+
+    private CommentQDO buildCommentQDO(CommentQSO qso) {
+        if(null == qso){
+            return null;
+        }
+        CommentQDO result = new CommentQDO();
+        populate(result,qso);
+        return result;
     }
 }

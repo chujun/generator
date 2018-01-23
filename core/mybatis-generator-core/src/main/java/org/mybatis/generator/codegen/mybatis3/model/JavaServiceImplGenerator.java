@@ -90,7 +90,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
             addMicroAnnotation(serviceInterface);
         }
 
-        generateDtoDoMapper(introspectedTable, serviceInterface, boType, dtoType,qsoType,qdoType);
+
 
         if (cache) {
             /**
@@ -333,6 +333,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
 
             serviceInterface.addMethod(method);
         }
+        generateDtoDoMapper(introspectedTable, serviceInterface, boType, dtoType,qsoType,qdoType);
 
         List<CompilationUnit> answer = new ArrayList<CompilationUnit>();
         answer.add(serviceInterface);
@@ -344,8 +345,8 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
                                      FullyQualifiedJavaType doType, FullyQualifiedJavaType dtoType,
                                      FullyQualifiedJavaType qsoType,FullyQualifiedJavaType qdoType) {
         Method do2dto = new Method("to");
-        do2dto.setVisibility(JavaVisibility.PUBLIC);
-        do2dto.setStatic(true);
+        do2dto.setVisibility(JavaVisibility.PRIVATE);
+        do2dto.setStatic(false);
         do2dto.setReturnType(dtoType);
         do2dto.addParameter(new Parameter(doType, "d"));
         StringBuilder sb = new StringBuilder();
@@ -377,9 +378,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
             }
         }
         do2dto.addBodyLine("return t;");
-
         serviceInterface.addMethod(do2dto);
-
 
         Method dto2do = generateDTO2DOMethod(doType, dtoType);
         serviceInterface.addMethod(dto2do);
@@ -393,8 +392,8 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
 
         Method do2dtos = new Method("to");
         serviceInterface.addMethod(do2dtos);
-        do2dtos.setVisibility(JavaVisibility.PUBLIC);
-        do2dtos.setStatic(true);
+        do2dtos.setVisibility(JavaVisibility.PRIVATE);
+        do2dtos.setStatic(false);
         FullyQualifiedJavaType returnType = FullyQualifiedJavaType.getNewListInstance();
         returnType.addTypeArgument(dtoType);
         do2dtos.setReturnType(returnType);
