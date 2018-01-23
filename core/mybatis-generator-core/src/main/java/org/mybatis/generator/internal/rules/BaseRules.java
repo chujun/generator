@@ -15,6 +15,7 @@
  */
 package org.mybatis.generator.internal.rules;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.IntrospectedTable.TargetRuntime;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
@@ -465,5 +466,41 @@ public abstract class BaseRules implements Rules {
      */
     public boolean generateJavaClient() {
         return !isModelOnly;
+    }
+
+    @Override
+    public boolean generateBaseCondList() {
+        // TODO Auto-generated method stub
+        return generateSelectByCond() || generateCountByCond();
+    }
+
+    @Override
+    public boolean generateSelectByCond() {
+        return tableConfiguration.getProperty("selectByCond") == null
+                || "true".equals(tableConfiguration.getProperty("selectByCond"));
+    }
+
+    @Override
+    public boolean generateCountByCond() {
+        return tableConfiguration.getProperty("countByCond") == null
+                || "true".equals(tableConfiguration.getProperty("countByCond"));
+    }
+
+    /**
+     * 使用Cache,此时需要生成cacheKey以及相关的方法
+     */
+    @Override
+    public boolean enableCache() {
+        return "true".equals(tableConfiguration.getProperty("cache"));
+    }
+
+    @Override
+    public String cacheTime() {
+        String t = tableConfiguration.getProperty("cache.expireInSeconds");
+
+        if (StringUtils.isEmpty(t)) {
+            t = "86400";
+        }
+        return t;
     }
 }

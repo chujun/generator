@@ -155,6 +155,14 @@ public interface Rules {
      */
     boolean generateBaseColumnList();
 
+    boolean generateBaseCondList();
+
+    boolean generateSelectByCond();
+
+    boolean generateCountByCond();
+
+    boolean enableCache();
+
     /**
      * Implements the rule for generating the SQL blob column list element.
      * Generate the element if any of the select methods are enabled, and the
@@ -247,4 +255,6 @@ public interface Rules {
     boolean generateJavaClient();
 
     IntrospectedTable getIntrospectedTable();
+
+    String cacheTime();
 }
