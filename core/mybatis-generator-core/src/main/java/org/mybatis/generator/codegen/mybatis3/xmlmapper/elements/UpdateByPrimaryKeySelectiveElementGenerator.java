@@ -65,6 +65,12 @@ public class UpdateByPrimaryKeySelectiveElementGenerator extends
 
         for (IntrospectedColumn introspectedColumn : introspectedTable
                 .getNonPrimaryKeyColumns()) {
+
+            String props = introspectedColumn.getJavaProperty();
+            if ("gmtCreated".equals(props) || "creator".equals(props)) {
+                continue;
+            }
+
             XmlElement isNotNullElement = new XmlElement("if"); //$NON-NLS-1$
             sb.setLength(0);
             sb.append(introspectedColumn.getJavaProperty());

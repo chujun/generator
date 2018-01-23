@@ -15,14 +15,14 @@
  */
 package org.mybatis.generator.codegen.mybatis3.xmlmapper.elements;
 
-import java.util.Iterator;
-
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.OutputUtilities;
 import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
+
+import java.util.Iterator;
 
 /**
  * 
@@ -67,7 +67,10 @@ public class UpdateByPrimaryKeyWithoutBLOBsElementGenerator extends
         }
         while (iter.hasNext()) {
             IntrospectedColumn introspectedColumn = iter.next();
-
+            String props = introspectedColumn.getJavaProperty();
+            if ("gmtCreated".equals(props) || "creator".equals(props)) {
+                continue;
+            }
             sb.append(MyBatis3FormattingUtilities
                     .getEscapedColumnName(introspectedColumn));
             sb.append(" = "); //$NON-NLS-1$

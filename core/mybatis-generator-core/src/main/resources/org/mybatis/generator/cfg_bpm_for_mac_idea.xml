@@ -85,23 +85,23 @@
 		</javaClientGenerator>
 
 		
-		 <!--<table tableName='act_wo_comment' domainObjectName='CommentDO'-->
-			<!--enableCountByExample='false' enableUpdateByExample='false'-->
-			<!--enableDeleteByExample='false' enableSelectByExample='false'-->
-			<!--selectByExampleQueryId='false'>-->
-			<!--<property name="micro.version" value="v1" />-->
-			<!--<property name="micro.path" value="comment" />-->
-			<!--<property name="cache" value="false" />-->
-		<!--</table>-->
-
-		<table tableName='act_wo_comment' domainObjectName='CommentDO'
-			   enableCountByExample='false' enableUpdateByExample='false'
-			   enableDeleteByExample='false' enableSelectByExample='false'
-			   selectByExampleQueryId='false'>
+		 <table tableName='act_wo_comment' domainObjectName='CommentDO'
+			enableCountByExample='false' enableUpdateByExample='false'
+			enableDeleteByExample='false' enableSelectByExample='false'
+			selectByExampleQueryId='false'>
 			<property name="micro.version" value="v1" />
-			<property name="micro.path" value="process/comment" />
+			<property name="micro.path" value="comment" />
 			<property name="cache" value="false" />
 		</table>
+
+		<!--<table tableName='act_hi_identitylink' domainObjectName='HistoryIdentityLinkDO'-->
+		<!--enableCountByExample='false' enableUpdateByExample='false'-->
+		<!--enableDeleteByExample='false' enableSelectByExample='false'-->
+		<!--selectByExampleQueryId='false'>-->
+		<!--<property name="micro.version" value="v1" />-->
+		<!--<property name="micro.path" value="history/identityLink" />-->
+		<!--<property name="cache" value="false" />-->
+		<!--</table>-->
 
 
 		
