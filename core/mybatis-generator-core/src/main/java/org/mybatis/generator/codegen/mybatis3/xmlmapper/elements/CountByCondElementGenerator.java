@@ -32,6 +32,7 @@ public class CountByCondElementGenerator extends AbstractXmlElementGenerator {
     @Override
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("select"); //$NON-NLS-1$
+        context.getCommentGenerator().addComment(answer);
         StringBuffer sb = new StringBuffer();
         answer.addAttribute(new Attribute("id", introspectedTable.getAttr(InternalAttribute.ATTR_COUNT_BY_COND))); //$NON-NLS-1$
         answer.addAttribute(new Attribute("resultType", //$NON-NLS-1$

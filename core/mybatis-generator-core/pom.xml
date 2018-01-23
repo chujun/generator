@@ -153,12 +153,6 @@
           <groupId>com.taobao.diamond</groupId>
           <artifactId>diamond-client</artifactId>
         </exclusion>
-
-
-        <exclusion>
-          <groupId>org.springframework</groupId>
-          <artifactId>spring-core</artifactId>
-        </exclusion>
         <exclusion>
           <groupId>org.springframework</groupId>
           <artifactId>spring-beans</artifactId>
@@ -176,10 +170,6 @@
       <exclusions>
         <exclusion>
           <artifactId>spring-aop</artifactId>
-          <groupId>org.springframework</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>spring-context</artifactId>
           <groupId>org.springframework</groupId>
         </exclusion>
         <exclusion>
@@ -209,10 +199,6 @@
         <exclusion>
           <artifactId>spring-boot-autoconfigure</artifactId>
           <groupId>org.springframework.boot</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>spring-context</artifactId>
-          <groupId>org.springframework</groupId>
         </exclusion>
       </exclusions>
     </dependency>

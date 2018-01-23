@@ -32,7 +32,7 @@ public class SelectByCondElementGenerator extends AbstractXmlElementGenerator {
     @Override
     public void addElements(XmlElement parentElement) {
         XmlElement answer = new XmlElement("select"); //$NON-NLS-1$
-
+        context.getCommentGenerator().addComment(answer);
         answer.addAttribute(new Attribute("id", introspectedTable.getAttr(InternalAttribute.ATTR_SELECT_BY_COND))); //$NON-NLS-1$
         answer.addAttribute(new Attribute("resultMap", //$NON-NLS-1$
                 introspectedTable.getBaseResultMapId()));
