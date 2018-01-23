@@ -32,7 +32,7 @@ public class CountByCondMethodGenerator extends AbstractJavaMapperMethodGenerato
 
     @Override
     public void addInterfaceElements(Interface interfaze) {
-        FullyQualifiedJavaType fqjt = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
+        FullyQualifiedJavaType fqjt = new FullyQualifiedJavaType(introspectedTable.getAttr(InternalAttribute.ATTR_QDO_TYPE));
 
         Set<FullyQualifiedJavaType> importedTypes = new TreeSet<FullyQualifiedJavaType>();
         importedTypes.add(fqjt);

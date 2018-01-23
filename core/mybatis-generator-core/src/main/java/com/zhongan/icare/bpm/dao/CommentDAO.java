@@ -1,5 +1,6 @@
 package com.zhongan.icare.bpm.dao;
 
+import com.zhongan.icare.bpm.bean.qdo.CommentQDO;
 import com.zhongan.icare.bpm.dao.dataObject.CommentDO;
 import java.util.List;
 
@@ -51,12 +52,12 @@ public interface CommentDAO {
      *
      * @mbggenerated
      */
-    List<CommentDO> selectByCond(CommentDO cond);
+    List<CommentDO> selectByCond(CommentQDO cond);
 
     /**
      * This method corresponds to the database table act_wo_comment
      *
      * @mbggenerated
      */
-    int countByCond(CommentDO cond);
+    int countByCond(CommentQDO cond);
 }
