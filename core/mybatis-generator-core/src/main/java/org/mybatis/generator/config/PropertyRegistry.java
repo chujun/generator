@@ -21,7 +21,7 @@ package org.mybatis.generator.config;
  * properties, and helps to avoid spelling errors.
  * 
  * @author Jeff Butler
- * 
+ *
  */
 public class PropertyRegistry {
     public static final String ANY_ENABLE_SUB_PACKAGES = "enableSubPackages"; //$NON-NLS-1$
@@ -30,6 +30,7 @@ public class PropertyRegistry {
      * recognized by table and java model generator
      */
     public static final String ANY_ROOT_CLASS = "rootClass"; //$NON-NLS-1$
+    public static final String ANY_DTO_ROOT_CLASS = "dtoRootClass";
     public static final String ANY_IMMUTABLE = "immutable"; //$NON-NLS-1$
     public static final String ANY_CONSTRUCTOR_BASED = "constructorBased"; //$NON-NLS-1$
 
@@ -56,7 +57,7 @@ public class PropertyRegistry {
     public static final String CONTEXT_XML_FORMATTER = "xmlFormatter"; //$NON-NLS-1$
 
     public static final String CLIENT_USE_LEGACY_BUILDER = "useLegacyBuilder"; //$NON-NLS-1$
-    
+
     public static final String DAO_EXAMPLE_METHOD_VISIBILITY = "exampleMethodVisibility"; //$NON-NLS-1$
     public static final String DAO_METHOD_NAME_CALCULATOR = "methodNameCalculator"; //$NON-NLS-1$
 

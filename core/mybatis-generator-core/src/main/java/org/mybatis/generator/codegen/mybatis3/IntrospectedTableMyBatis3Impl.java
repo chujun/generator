@@ -15,9 +15,6 @@
  */
 package org.mybatis.generator.codegen.mybatis3;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.GeneratedXmlFile;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -31,13 +28,13 @@ import org.mybatis.generator.codegen.AbstractXmlGenerator;
 import org.mybatis.generator.codegen.mybatis3.javamapper.AnnotatedClientGenerator;
 import org.mybatis.generator.codegen.mybatis3.javamapper.JavaMapperGenerator;
 import org.mybatis.generator.codegen.mybatis3.javamapper.MixedClientGenerator;
-import org.mybatis.generator.codegen.mybatis3.model.BaseRecordGenerator;
-import org.mybatis.generator.codegen.mybatis3.model.ExampleGenerator;
-import org.mybatis.generator.codegen.mybatis3.model.PrimaryKeyGenerator;
-import org.mybatis.generator.codegen.mybatis3.model.RecordWithBLOBsGenerator;
+import org.mybatis.generator.codegen.mybatis3.model.*;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator;
 import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.internal.ObjectFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Class IntrospectedTableMyBatis3Impl.
@@ -196,6 +193,25 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
                     progressCallback);
             javaModelGenerators.add(javaGenerator);
         }
+        //TODO:cj to be added
+        /**
+         * DTO file
+         */
+        AbstractJavaGenerator dtoGenerator = new BaseDTORecordGenerator();
+        initializeAbstractGenerator(dtoGenerator, warnings, progressCallback);
+        javaModelGenerators.add(dtoGenerator);
+
+        /**
+         * java service interface
+         */
+
+        AbstractJavaGenerator interfaceGenerator = new JavaServiceInterfaceGenerator();
+        initializeAbstractGenerator(interfaceGenerator, warnings, progressCallback);
+        javaModelGenerators.add(interfaceGenerator);
+
+        AbstractJavaGenerator implGenerator = new JavaServiceImplGenerator();
+        initializeAbstractGenerator(implGenerator, warnings, progressCallback);
+        javaModelGenerators.add(implGenerator);
     }
 
     /**

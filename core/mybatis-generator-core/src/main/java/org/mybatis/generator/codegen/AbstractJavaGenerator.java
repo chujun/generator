@@ -17,6 +17,7 @@ package org.mybatis.generator.codegen;
 
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.config.PropertyRegistry;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 import java.util.Properties;
@@ -66,6 +67,84 @@ public abstract class AbstractJavaGenerator extends AbstractGenerator {
         }
 
         return rootClass;
+    }
+
+    public String getDTORootClass() {
+        String rootClass = introspectedTable.getTableConfigurationProperty(PropertyRegistry.ANY_DTO_ROOT_CLASS);
+        if (rootClass == null) {
+            Properties properties = context.getJavaModelGeneratorConfiguration().getProperties();
+            rootClass = properties.getProperty(PropertyRegistry.ANY_DTO_ROOT_CLASS);
+        }
+
+        return rootClass;
+    }
+
+    public String getAppName() {
+        String appName = introspectedTable.getContext().getProperty("appName");
+        if (appName != null) {
+            return appName.trim();
+        }
+
+        return introspectedTable.getContext().getId();
+        //
+        //        String rootPackge = introspectedTable.getContext().getProperty("rootPackage");
+        //        if (rootPackage != null) {
+        //
+        //        }
+    }
+
+    public static void annotationRequestBody(Parameter para) {
+        para.addAnnotation("@RequestBody");
+    }
+
+    public static void annotationRequestMapping(Method method, String path, String consume, String produce,
+                                                RequestMethod... reuqestMethods) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("@RequestMapping(path = \"");
+        sb.append(path == null ? method.getName() : path);
+        sb.append("\"");
+        if (consume != null) {
+            sb.append(",");
+            sb.append("consumes=");
+            sb.append('"');
+            sb.append(consume);
+            sb.append('"');
+        }
+
+        if (produce != null) {
+            sb.append(",");
+            sb.append("produces=");
+            sb.append('"');
+            sb.append(produce);
+            sb.append('"');
+        }
+
+        if (reuqestMethods != null && reuqestMethods.length > 0) {
+            sb.append(",");
+            sb.append("method=");
+            sb.append('{');
+            for (RequestMethod rm : reuqestMethods) {
+                sb.append("RequestMethod.").append(rm.name());
+                sb.append(",");
+            }
+            sb.delete(sb.length() - 1, sb.length());
+            sb.append('}');
+        }
+        sb.append(')');
+
+        method.addAnnotation(sb.toString());
+    }
+
+    public static void annotationRequestParam(Parameter para, String name) {
+        para.addAnnotation(String.format("@RequestParam(\"%s\")", name));
+    }
+
+    public static void annotationDelete(Parameter para, String name) {
+        para.addAnnotation(String.format("@PathVariable(\"%s\")", name));
+    }
+
+    public static void annotationGet(Parameter para, String name) {
+        para.addAnnotation(String.format("@PathVariable(\"%s\")", name));
     }
 
     protected void addDefaultConstructor(TopLevelClass topLevelClass) {

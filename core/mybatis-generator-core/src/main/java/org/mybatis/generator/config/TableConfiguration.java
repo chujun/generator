@@ -15,21 +15,20 @@
  */
 package org.mybatis.generator.config;
 
-import static org.mybatis.generator.internal.util.EqualsUtil.areEqual;
-import static org.mybatis.generator.internal.util.HashCodeUtil.hash;
-import static org.mybatis.generator.internal.util.HashCodeUtil.SEED;
-import static org.mybatis.generator.internal.util.messages.Messages.getString;
-import static org.mybatis.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import com.zhongan.health.common.utils.BeanUtils;
+import org.mybatis.generator.api.dom.xml.Attribute;
+import org.mybatis.generator.api.dom.xml.XmlElement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.mybatis.generator.api.dom.xml.Attribute;
-import org.mybatis.generator.api.dom.xml.XmlElement;
+import static org.mybatis.generator.internal.util.EqualsUtil.areEqual;
+import static org.mybatis.generator.internal.util.HashCodeUtil.SEED;
+import static org.mybatis.generator.internal.util.HashCodeUtil.hash;
+import static org.mybatis.generator.internal.util.StringUtility.*;
+import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 /**
  * The Class TableConfiguration.
@@ -61,6 +60,10 @@ public class TableConfiguration extends PropertyHolder {
 
     /** The update by example statement enabled. */
     private boolean updateByExampleStatementEnabled;
+
+    private boolean                     selectByCond;
+
+    private boolean                     countByCond;
 
     /** The column overrides. */
     private List<ColumnOverride> columnOverrides;
@@ -472,6 +475,9 @@ public class TableConfiguration extends PropertyHolder {
      * @return the domain object name
      */
     public String getDomainObjectName() {
+        if (domainObjectName == null || domainObjectName.trim().length() == 0) {
+            return BeanUtils.tableToBeanName(tableName);
+        }
         return domainObjectName;
     }
 
@@ -863,5 +869,21 @@ public class TableConfiguration extends PropertyHolder {
     public void setAllColumnDelimitingEnabled(
             boolean isAllColumnDelimitingEnabled) {
         this.isAllColumnDelimitingEnabled = isAllColumnDelimitingEnabled;
+    }
+
+    public boolean isSelectByCond() {
+        return selectByCond;
+    }
+
+    public void setSelectByCond(boolean selectByCond) {
+        this.selectByCond = selectByCond;
+    }
+
+    public boolean isCountByCond() {
+        return countByCond;
+    }
+
+    public void setCountByCond(boolean countByCond) {
+        this.countByCond = countByCond;
     }
 }
