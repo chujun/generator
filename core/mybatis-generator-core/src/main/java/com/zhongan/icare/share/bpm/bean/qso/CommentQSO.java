@@ -1,4 +1,4 @@
-package com.zhongan.icare.bpm.bean.qso;
+package com.zhongan.icare.share.bpm.bean.qso;
 
 import com.zhongan.icare.share.bpm.dto.CommentDTO;
 

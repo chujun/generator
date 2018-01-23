@@ -1,6 +1,6 @@
 package com.zhongan.icare.share.bpm.service;
 
-import com.zhongan.icare.bpm.bean.qso.CommentQSO;
+import com.zhongan.icare.share.bpm.bean.qso.CommentQSO;
 import com.zhongan.icare.share.bpm.dto.CommentDTO;
 import java.util.List;
 import org.springframework.cloud.netflix.feign.FeignClient;

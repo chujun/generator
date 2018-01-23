@@ -1395,7 +1395,8 @@ public abstract class IntrospectedTable {
         sb.append(fullyQualifiedTable.getSubPackage(isSubPackagesEnabled(config)));
 
         String rootPackage = context.getProperty("rootPackage");
-        return rootPackage + ".bean.qso";
+        return StringUtils.substringBeforeLast(rootPackage, ".") + ".share."
+                + StringUtils.substringAfterLast(rootPackage, ".") + ".bean.qso";
     }
 
     protected String calculateJavaClientQDOPackage(){
