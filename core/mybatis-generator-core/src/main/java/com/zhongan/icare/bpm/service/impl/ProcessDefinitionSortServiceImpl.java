@@ -11,6 +11,8 @@ import com.zhongan.icare.bpm.dao.dataObject.ProcessDefinitionSortDO;
 import com.zhongan.icare.share.bpm.bean.qso.ProcessDefinitionSortQSO;
 import com.zhongan.icare.share.bpm.dto.ProcessDefinitionSortDTO;
 import com.zhongan.icare.share.bpm.service.IProcessDefinitionSortService;
+import java.util.Collections;
+import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Collections;
-import java.util.List;
 
 @Service
 @RestController

@@ -22,10 +22,10 @@
 <!-- org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl:用于java 
 	type和jdbc type映射 -->
 <generatorConfiguration>
-	<!-- org.mybatis.generator.config.Context.generateFiles(ProgressCallback, 
+	<!-- org.mybatis.generator.config.Context.generateFiles(ProgressCallback,
 		List<GeneratedJavaFile>, List<GeneratedXmlFile>, List<String>) -->
 	<!-- 产生文件 -->
-	<!-- org.mybatis.generator.codegen.mybatis3.IntrospectedTableMyBatis3Impl.calculateGenerators(List<String>, 
+	<!-- org.mybatis.generator.codegen.mybatis3.IntrospectedTableMyBatis3Impl.calculateGenerators(List<String>,
 		ProgressCallback) -->
 	<!--defaultModelType hierarchical:层级, flat:平滑,conditional(默认):条件 -->
 	<context id="icare" targetRuntime="MyBatis3" defaultModelType="conditional">
@@ -91,7 +91,8 @@
 			selectByExampleQueryId='false'>
 			<property name="micro.version" value="v1" />
 			<property name="micro.path" value="process/sort" />
-			<property name="cache" value="false" />
+			<property name="cache" value="false"/>
+			 <property name="logicDelete" value="true" />
 		</table>
 
 		<!--<table tableName='act_hi_identitylink' domainObjectName='HistoryIdentityLinkDO'-->
@@ -101,6 +102,7 @@
 		<!--<property name="micro.version" value="v1" />-->
 		<!--<property name="micro.path" value="history/identityLink" />-->
 		<!--<property name="cache" value="false" />-->
+		<!--<property name="logicDelete" value="true" />-->
 		<!--</table>-->
 
 
@@ -112,6 +114,6 @@
 	</context>
 
 
-	<!-- 产生文件 org.mybatis.generator.codegen.mybatis3.IntrospectedTableMyBatis3Impl.calculateJavaModelGenerators(List<String>, 
+	<!-- 产生文件 org.mybatis.generator.codegen.mybatis3.IntrospectedTableMyBatis3Impl.calculateJavaModelGenerators(List<String>,
 		ProgressCallback) -->
 </generatorConfiguration>

@@ -5,7 +5,7 @@ import com.zhongan.health.common.share.bean.BaseDTO;
 @lombok.Getter
 @lombok.Setter
 public class ProcessDefinitionSortDTO extends BaseDTO {
-    private static final long serialVersionUID = 1516708234126L;
+    private static final long serialVersionUID = 1516786396233L;
 
     /**
      * 分类名称
@@ -43,7 +43,7 @@ public class ProcessDefinitionSortDTO extends BaseDTO {
     private String description;
 
     /**
-     * 是否在oa显示
+     * 是否在oa显示,默认显示,0:不显示,1:显示
      *
      * @mbggenerated
      */

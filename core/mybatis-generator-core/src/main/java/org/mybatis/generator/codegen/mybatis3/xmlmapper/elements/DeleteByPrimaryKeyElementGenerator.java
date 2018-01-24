@@ -60,10 +60,22 @@ public class DeleteByPrimaryKeyElementGenerator extends
 
         context.getCommentGenerator().addComment(answer);
 
+        //物理删除还是逻辑删除
+        boolean logicDelete = isLogicDelete();
         StringBuilder sb = new StringBuilder();
-        sb.append("delete from "); //$NON-NLS-1$
-        sb.append(introspectedTable.getFullyQualifiedTableNameAtRuntime());
-        answer.addElement(new TextElement(sb.toString()));
+        String deleteField = "is_deleted";
+        if(logicDelete){
+            sb.append("update ");
+            sb.append(introspectedTable.getFullyQualifiedTableNameAtRuntime());
+            sb.append(" set " + deleteField + " = 'Y'");
+            answer.addElement(new TextElement(sb.toString()));
+        }else{
+            sb.append("delete from "); //$NON-NLS-1$
+            sb.append(introspectedTable.getFullyQualifiedTableNameAtRuntime());
+            answer.addElement(new TextElement(sb.toString()));
+        }
+
+
 
         boolean and = false;
         for (IntrospectedColumn introspectedColumn : introspectedTable
@@ -81,6 +93,9 @@ public class DeleteByPrimaryKeyElementGenerator extends
             sb.append(" = "); //$NON-NLS-1$
             sb.append(MyBatis3FormattingUtilities
                     .getParameterClause(introspectedColumn));
+            if(logicDelete){
+                sb.append(" and " + deleteField + " = 'N'");
+            }
             answer.addElement(new TextElement(sb.toString()));
         }
 
@@ -89,5 +104,11 @@ public class DeleteByPrimaryKeyElementGenerator extends
                         introspectedTable)) {
             parentElement.addElement(answer);
         }
+    }
+
+    private boolean isLogicDelete(){
+        //xml配置文件自定义的属性
+        String logicDelete = introspectedTable.getTableConfigurationProperty("logicDelete");
+        return "true".equals(logicDelete);
     }
 }
