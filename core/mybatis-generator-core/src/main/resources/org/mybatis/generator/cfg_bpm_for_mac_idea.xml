@@ -33,7 +33,7 @@
 		<property name="javaFileEncoding" value="UTF-8" />
 		<property name="micro.service" value="true" />
 		<property name="fileLocation"
-				  value="/Users/chujun/Documents/ideaspace/za/icare-doc/branch/20170303_20031_1/06-开发/01-工具/mybatis-generator-core"/>
+				  value="/Users/chujun/Documents/ideaspace/openSource/mybatis/generator/core/mybatis-generator-core"/>
 
 
 		<property name="rootPackage" value="com.zhongan.icare.bpm" />
