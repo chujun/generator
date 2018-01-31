@@ -5,12 +5,12 @@ import com.google.common.collect.Lists;
 import com.zhongan.health.common.persistence.CommonFieldUtils;
 import com.zhongan.health.common.persistence.SequenceFactory;
 import com.zhongan.health.common.share.enm.YesOrNo;
-import com.zhongan.icare.bpm.bean.qdo.ProcessDefinitionSortQDO;
-import com.zhongan.icare.bpm.dao.ProcessDefinitionSortDAO;
-import com.zhongan.icare.bpm.dao.dataObject.ProcessDefinitionSortDO;
-import com.zhongan.icare.share.bpm.bean.qso.ProcessDefinitionSortQSO;
-import com.zhongan.icare.share.bpm.dto.ProcessDefinitionSortDTO;
-import com.zhongan.icare.share.bpm.service.IProcessDefinitionSortService;
+import com.zhongan.icare.bpm.bean.qdo.ProcessCarbonCopyQDO;
+import com.zhongan.icare.bpm.dao.ProcessCarbonCopyDAO;
+import com.zhongan.icare.bpm.dao.dataObject.ProcessCarbonCopyDO;
+import com.zhongan.icare.share.bpm.bean.qso.ProcessCarbonCopyQSO;
+import com.zhongan.icare.share.bpm.dto.ProcessCarbonCopyDTO;
+import com.zhongan.icare.share.bpm.service.IProcessCarbonCopyService;
 import java.util.Collections;
 import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
@@ -23,18 +23,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Service
 @RestController
-class ProcessDefinitionSortServiceImpl implements IProcessDefinitionSortService {
+class ProcessCarbonCopyServiceImpl implements IProcessCarbonCopyService {
     @Autowired
-    ProcessDefinitionSortDAO dao;
+    ProcessCarbonCopyDAO dao;
 
     @Override
-    public long create(@RequestBody ProcessDefinitionSortDTO dto) {
+    public long create(@RequestBody ProcessCarbonCopyDTO dto) {
         Preconditions.checkArgument(dto != null,"dto不能为空.");
-        ProcessDefinitionSortDO dataobject=to(dto);
+        ProcessCarbonCopyDO dataobject=to(dto);
         Long id=dataobject.getId();
         if(id==null)
         {
-            id=SequenceFactory.nextId(ProcessDefinitionSortDO.class);
+            id=SequenceFactory.nextId(ProcessCarbonCopyDO.class);
             dataobject.setId(id);
         }
         CommonFieldUtils.populate(dataobject, true);
@@ -50,51 +50,60 @@ class ProcessDefinitionSortServiceImpl implements IProcessDefinitionSortService 
     }
 
     @Override
-    public int update(@RequestBody ProcessDefinitionSortDTO dto) {
+    public int update(@RequestBody ProcessCarbonCopyDTO dto) {
         Preconditions.checkArgument(dto != null&&dto.getId()!=null,"Id不能为空.");
-        ProcessDefinitionSortDO dataobject=to(dto);
+        ProcessCarbonCopyDO dataobject=to(dto);
         CommonFieldUtils.populate(dataobject, false);
         int cnt = dao.updateByPrimaryKeySelective(dataobject);
         return cnt;
     }
 
     @Override
-    public List<ProcessDefinitionSortDTO> list(@RequestBody ProcessDefinitionSortQSO qso) {
+    public List<ProcessCarbonCopyDTO> list(@RequestBody ProcessCarbonCopyQSO qso) {
         Preconditions.checkArgument(qso != null,"查询条件不能为空.");
-        ProcessDefinitionSortQDO qdo = buildProcessDefinitionSortQDO(qso);
+        ProcessCarbonCopyQDO qdo = buildProcessCarbonCopyQDO(qso);
         qdo.setIsDeleted(YesOrNo.NO.getValue());
-        List<ProcessDefinitionSortDO> dataobjects =  dao.selectByCond(qdo);
+        List<ProcessCarbonCopyDO> dataobjects =  dao.selectByCond(qdo);
         return to(dataobjects);
     }
 
     @Override
-    public int count(@RequestBody ProcessDefinitionSortQSO qso) {
+    public int count(@RequestBody ProcessCarbonCopyQSO qso) {
         Preconditions.checkArgument(qso != null,"查询条件不能为空.");
-        ProcessDefinitionSortQDO qdo = buildProcessDefinitionSortQDO(qso);
+        ProcessCarbonCopyQDO qdo = buildProcessCarbonCopyQDO(qso);
         qdo.setIsDeleted(YesOrNo.NO.getValue());
         int cnt = dao.countByCond(qdo);
         return cnt;
     }
 
     @Override
-    public ProcessDefinitionSortDTO get(@PathVariable("id") long id) {
+    public ProcessCarbonCopyDTO get(@PathVariable("id") long id) {
         Preconditions.checkArgument(id >0,"id必须大于0");
-        ProcessDefinitionSortDO dataobject =  dao.selectByPrimaryKey(id);
+        ProcessCarbonCopyDO dataobject =  dao.selectByPrimaryKey(id);
         return to(dataobject);
     }
 
-    private ProcessDefinitionSortDTO to(ProcessDefinitionSortDO d) {
+    private ProcessCarbonCopyDTO to(ProcessCarbonCopyDO d) {
         if(null == d){
             return null;
         }
-        ProcessDefinitionSortDTO t  = new ProcessDefinitionSortDTO();
+        ProcessCarbonCopyDTO t  = new ProcessCarbonCopyDTO();
         t.setId(d.getId());
-        t.setName(d.getName());
-        t.setParentSortId(d.getParentSortId());
-        t.setLevel(d.getLevel());
+        t.setState(d.getState());
+        t.setProcInstId(d.getProcInstId());
+        t.setBusinessKey(d.getBusinessKey());
+        t.setCustId(d.getCustId());
+        t.setCustName(d.getCustName());
         t.setTenantId(d.getTenantId());
-        t.setDescription(d.getDescription());
-        t.setOaShow(d.getOaShow());
+        t.setProcDefId(d.getProcDefId());
+        t.setProcDefKey(d.getProcDefKey());
+        t.setProcDefName(d.getProcDefName());
+        t.setSortId(d.getSortId());
+        t.setStartCustId(d.getStartCustId());
+        t.setStartCustName(d.getStartCustName());
+        t.setStartTime(d.getStartTime());
+        t.setEndTime(d.getEndTime());
+        t.setProcIsEnd(d.getProcIsEnd());
         if(StringUtils.isNotEmpty(d.getIsDeleted())){
             t.setIsDeleted(com.zhongan.health.common.utils.bean.enm.EnumUtils.byValue(d.getIsDeleted(),com.zhongan.health.common.share.enm.YesOrNo.class));
         }
@@ -105,23 +114,32 @@ class ProcessDefinitionSortServiceImpl implements IProcessDefinitionSortService 
         return t;
     }
 
-    private ProcessDefinitionSortDO to(ProcessDefinitionSortDTO t) {
-        ProcessDefinitionSortDO d = new ProcessDefinitionSortDO();
+    private ProcessCarbonCopyDO to(ProcessCarbonCopyDTO t) {
+        ProcessCarbonCopyDO d = new ProcessCarbonCopyDO();
         populate(d,t);
         return d;
     }
 
-    private void populate(ProcessDefinitionSortDO d, ProcessDefinitionSortDTO t) {
+    private void populate(ProcessCarbonCopyDO d, ProcessCarbonCopyDTO t) {
         if(null == d){
-            d = new ProcessDefinitionSortDO();
+            d = new ProcessCarbonCopyDO();
         }
         d.setId(t.getId());
-        d.setName(t.getName());
-        d.setParentSortId(t.getParentSortId());
-        d.setLevel(t.getLevel());
+        d.setState(t.getState());
+        d.setProcInstId(t.getProcInstId());
+        d.setBusinessKey(t.getBusinessKey());
+        d.setCustId(t.getCustId());
+        d.setCustName(t.getCustName());
         d.setTenantId(t.getTenantId());
-        d.setDescription(t.getDescription());
-        d.setOaShow(t.getOaShow());
+        d.setProcDefId(t.getProcDefId());
+        d.setProcDefKey(t.getProcDefKey());
+        d.setProcDefName(t.getProcDefName());
+        d.setSortId(t.getSortId());
+        d.setStartCustId(t.getStartCustId());
+        d.setStartCustName(t.getStartCustName());
+        d.setStartTime(t.getStartTime());
+        d.setEndTime(t.getEndTime());
+        d.setProcIsEnd(t.getProcIsEnd());
         if (t.getIsDeleted() != null){
             d.setIsDeleted(t.getIsDeleted().getValue());
         }
@@ -131,20 +149,20 @@ class ProcessDefinitionSortServiceImpl implements IProcessDefinitionSortService 
         d.setGmtModified(t.getGmtModified());
     }
 
-    private List<ProcessDefinitionSortDTO> to(List<ProcessDefinitionSortDO> dataobjects) {
+    private List<ProcessCarbonCopyDTO> to(List<ProcessCarbonCopyDO> dataobjects) {
         if(CollectionUtils.isEmpty(dataobjects)){
             return Collections.emptyList();
         }
-        List<ProcessDefinitionSortDTO> dtos=Lists.newArrayListWithCapacity(dataobjects.size());
-        for(ProcessDefinitionSortDO dataobject:dataobjects){dtos.add(to(dataobject));}
+        List<ProcessCarbonCopyDTO> dtos=Lists.newArrayListWithCapacity(dataobjects.size());
+        for(ProcessCarbonCopyDO dataobject:dataobjects){dtos.add(to(dataobject));}
         return dtos;
     }
 
-    private ProcessDefinitionSortQDO buildProcessDefinitionSortQDO(ProcessDefinitionSortQSO qso) {
+    private ProcessCarbonCopyQDO buildProcessCarbonCopyQDO(ProcessCarbonCopyQSO qso) {
         if(null == qso){
             return null;
         }
-        ProcessDefinitionSortQDO result = new ProcessDefinitionSortQDO();
+        ProcessCarbonCopyQDO result = new ProcessCarbonCopyQDO();
         populate(result,qso);
         return result;
     }

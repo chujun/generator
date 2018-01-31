@@ -29,7 +29,7 @@
 		ProgressCallback) -->
 	<!--defaultModelType hierarchical:层级, flat:平滑,conditional(默认):条件 -->
 	<context id="icare" targetRuntime="MyBatis3" defaultModelType="conditional">
-		<property name="appName" value="icare-account" />
+		<property name="appName" value="icare-bpm" />
 		<property name="javaFileEncoding" value="UTF-8" />
 		<property name="micro.service" value="true" />
 		<property name="fileLocation"
@@ -85,7 +85,7 @@
 		</javaClientGenerator>
 
 
-		 <table tableName='act_my_process_sort' domainObjectName='ProcessDefinitionSortDO'
+		 <table tableName='act_my_carbon_copy' domainObjectName='ProcessCarbonCopyDO'
 			enableCountByExample='false' enableUpdateByExample='false'
 			enableDeleteByExample='false' enableSelectByExample='false'
 			selectByExampleQueryId='false'>
