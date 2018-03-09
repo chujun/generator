@@ -85,7 +85,7 @@
 		</javaClientGenerator>
 
 
-		 <table tableName='act_my_carbon_copy' domainObjectName='ProcessCarbonCopyDO'
+		 <table tableName='act_wo_comment' domainObjectName='CommentDO'
 			enableCountByExample='false' enableUpdateByExample='false'
 			enableDeleteByExample='false' enableSelectByExample='false'
 			selectByExampleQueryId='false'>
