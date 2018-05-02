@@ -17,6 +17,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,7 @@ class ExtraProcessDefinitionModelServiceImpl implements IExtraProcessDefinitionM
     ExtraProcessDefinitionModelDAO dao;
 
     @Override
+    @Transactional
     public long create(@RequestBody ExtraProcessDefinitionModelDTO dto) {
         Preconditions.checkArgument(dto != null,"dto不能为空.");
         ExtraProcessDefinitionModelDO dataobject=to(dto);
@@ -43,6 +45,7 @@ class ExtraProcessDefinitionModelServiceImpl implements IExtraProcessDefinitionM
     }
 
     @Override
+    @Transactional
     public int delete(@PathVariable("id") long id) {
         Preconditions.checkArgument(id>0,"Id必须大于0");
         int cnt = dao.deleteByPrimaryKey(id);
@@ -50,6 +53,7 @@ class ExtraProcessDefinitionModelServiceImpl implements IExtraProcessDefinitionM
     }
 
     @Override
+    @Transactional
     public int update(@RequestBody ExtraProcessDefinitionModelDTO dto) {
         Preconditions.checkArgument(dto != null&&dto.getId()!=null,"Id不能为空.");
         ExtraProcessDefinitionModelDO dataobject=to(dto);

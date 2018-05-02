@@ -25,6 +25,7 @@ import org.mybatis.generator.api.IntrospectedTable.InternalAttribute;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,6 +63,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
         serviceInterface.addField(daoField);
         serviceInterface.addImportedType(daoType);
         serviceInterface.addImportedType(FullyQualifiedJavaType.from(Autowired.class));
+        serviceInterface.addImportedType(FullyQualifiedJavaType.from(Transactional.class));
         serviceInterface
                 .addImportedType(FullyQualifiedJavaType.from(PathVariable.class));
         FullyQualifiedJavaType boType = new FullyQualifiedJavaType(
@@ -126,6 +128,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
         if (introspectedTable.getRules().generateInsert()) {
             Method method = new Method("create");
             method.addAnnotation("@Override");
+            method.addAnnotation("@Transactional");
             method.setReturnType(FullyQualifiedJavaType.getPrimitiveLongInstance());
             method.setVisibility(JavaVisibility.PUBLIC);
             Parameter param = new Parameter(dtoType, "dto");
@@ -204,6 +207,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
         if (introspectedTable.getRules().generateDeleteByPrimaryKey()) {
             Method method = new Method("delete");
             method.addAnnotation("@Override");
+            method.addAnnotation("@Transactional");
             method.setReturnType(FullyQualifiedJavaType.getIntInstance());
             method.setVisibility(JavaVisibility.PUBLIC);
             Parameter param = new Parameter(FullyQualifiedJavaType.getPrimitiveLongInstance(), "id");
@@ -228,6 +232,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
         if (introspectedTable.getRules().generateUpdateByPrimaryKeySelective()) {
             Method method = new Method("update");
             method.addAnnotation("@Override");
+            method.addAnnotation("@Transactional");
             method.setReturnType(FullyQualifiedJavaType.getIntInstance());
             method.setVisibility(JavaVisibility.PUBLIC);
             Parameter param = new Parameter(dtoType, "dto");

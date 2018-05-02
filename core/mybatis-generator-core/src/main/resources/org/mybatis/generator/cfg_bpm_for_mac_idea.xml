@@ -90,7 +90,7 @@
 			enableDeleteByExample='false' enableSelectByExample='false'
 			selectByExampleQueryId='false'>
 			<property name="micro.version" value="v1" />
-			<property name="micro.path" value="ExtraProcessDefinition" />
+			<property name="micro.path" value="extraProcessDefinition" />
 			<property name="cache" value="false"/>
 			 <property name="logicDelete" value="true" />
 		</table>
