@@ -85,12 +85,12 @@
 		</javaClientGenerator>
 
 
-		 <table tableName='act_my_ru_task' domainObjectName='ExtendTodoTaskDO'
+		 <table tableName='act_my_extra_proc_def' domainObjectName='ExtraProcessDefinitionModelDO'
 			enableCountByExample='false' enableUpdateByExample='false'
 			enableDeleteByExample='false' enableSelectByExample='false'
 			selectByExampleQueryId='false'>
 			<property name="micro.version" value="v1" />
-			<property name="micro.path" value="process/sort" />
+			<property name="micro.path" value="ExtraProcessDefinition" />
 			<property name="cache" value="false"/>
 			 <property name="logicDelete" value="true" />
 		</table>
