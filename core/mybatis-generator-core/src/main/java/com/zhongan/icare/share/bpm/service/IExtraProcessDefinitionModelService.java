@@ -1,6 +1,6 @@
 package com.zhongan.icare.share.bpm.service;
 
-import com.zhongan.icare.share.bpm.bean.qso.ExtraProcessDefinitionModelQSO;
+import com.zhongan.icare.share.bpm.bean.qdto.ExtraProcessDefinitionModelQDTO;
 import com.zhongan.icare.share.bpm.dto.ExtraProcessDefinitionModelDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.List;
 
 @FeignClient(name = "icare-bpm")
-@RequestMapping(path = "/int/v1/extraProcessDefinition")
+@RequestMapping(path = "/int/v1/ExtraProcessDefinition")
 public interface IExtraProcessDefinitionModelService {
     @RequestMapping(path = "create",method={RequestMethod.POST})
     long create(@RequestBody ExtraProcessDefinitionModelDTO dto);
@@ -23,10 +23,10 @@ public interface IExtraProcessDefinitionModelService {
     int update(@RequestBody ExtraProcessDefinitionModelDTO dto);
 
     @RequestMapping(path = "list",method={RequestMethod.POST})
-    List<ExtraProcessDefinitionModelDTO> list(@RequestBody ExtraProcessDefinitionModelQSO qso);
+    List<ExtraProcessDefinitionModelDTO> list(@RequestBody ExtraProcessDefinitionModelQDTO qso);
 
     @RequestMapping(path = "count",method={RequestMethod.POST})
-    int count(@RequestBody ExtraProcessDefinitionModelQSO qso);
+    int count(@RequestBody ExtraProcessDefinitionModelQDTO qso);
 
     @RequestMapping(path = "get/{id}",method={RequestMethod.GET})
     ExtraProcessDefinitionModelDTO get(@PathVariable("id") long id);

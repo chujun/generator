@@ -190,9 +190,9 @@ public abstract class IntrospectedTable {
         ATTR_DTO_TYPE,
 
         /**
-         * QSO bean
+         * QDTO bean
          */
-        ATTR_QSO_TYPE,
+        ATTR_QDTO_TYPE,
 
         /**
          * QDO bean
@@ -1379,7 +1379,7 @@ public abstract class IntrospectedTable {
         return rootPackage + ".service.impl";
     }
 
-    protected String calculateJavaClientQSOPackage(){
+    protected String calculateJavaClientQDTOPackage(){
         JavaClientGeneratorConfiguration config = context.getJavaClientGeneratorConfiguration();
         if (config == null) {
             return null;
@@ -1396,7 +1396,7 @@ public abstract class IntrospectedTable {
 
         String rootPackage = context.getProperty("rootPackage");
         return StringUtils.substringBeforeLast(rootPackage, ".") + ".share."
-                + StringUtils.substringAfterLast(rootPackage, ".") + ".bean.qso";
+                + StringUtils.substringAfterLast(rootPackage, ".") + ".bean.qdto";
     }
 
     protected String calculateJavaClientQDOPackage(){
@@ -1518,13 +1518,13 @@ public abstract class IntrospectedTable {
         internalAttributes.put(InternalAttribute.ATTR_DTO_TYPE, sb.toString());
 
         /**
-         * QSO 全类名
+         * QDTO 全类名
          */
         sb.setLength(0);
-        sb.append(calculateJavaClientQSOPackage());
+        sb.append(calculateJavaClientQDTOPackage());
         sb.append('.');
-        sb.append(fullyQualifiedTable.getQueryServiceObjectName());
-        internalAttributes.put(InternalAttribute.ATTR_QSO_TYPE, sb.toString());
+        sb.append(fullyQualifiedTable.getQueryDomainTransferObjectName());
+        internalAttributes.put(InternalAttribute.ATTR_QDTO_TYPE, sb.toString());
 
         /**
          * QDO 全类名

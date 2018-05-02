@@ -7,7 +7,7 @@ import com.zhongan.health.common.utils.bean.annotation.Name;
 @lombok.Setter
 @Name("act_my_extra_proc_def")
 public class ExtraProcessDefinitionModelDO extends BaseDataObject {
-    private static final long serialVersionUID = 1525246576539L;
+    private static final long serialVersionUID = 1525247856909L;
 
     /**
      * 流程定义模型Id

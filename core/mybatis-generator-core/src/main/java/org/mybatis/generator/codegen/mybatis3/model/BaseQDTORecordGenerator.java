@@ -35,9 +35,9 @@ import static org.mybatis.generator.internal.util.messages.Messages.getString;
  * 
  * @author yuanpingan 2016年9月10日 下午5:49:28
  */
-public class BaseQSORecordGenerator extends AbstractJavaGenerator {
+public class BaseQDTORecordGenerator extends AbstractJavaGenerator {
 
-    public BaseQSORecordGenerator() {
+    public BaseQDTORecordGenerator() {
         super();
     }
 
@@ -48,7 +48,7 @@ public class BaseQSORecordGenerator extends AbstractJavaGenerator {
         CommentGenerator commentGenerator = context.getCommentGenerator();
 
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(
-                introspectedTable.getAttr(InternalAttribute.ATTR_QSO_TYPE));
+                introspectedTable.getAttr(InternalAttribute.ATTR_QDTO_TYPE));
         TopLevelClass topLevelClass = new TopLevelClass(type);
         topLevelClass.setVisibility(JavaVisibility.PUBLIC);
         topLevelClass.addAnnotation("@lombok.Getter");

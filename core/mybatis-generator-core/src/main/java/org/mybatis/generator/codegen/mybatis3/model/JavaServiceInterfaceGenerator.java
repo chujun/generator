@@ -22,10 +22,7 @@ import org.mybatis.generator.api.IntrospectedTable.InternalAttribute;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,15 +54,15 @@ public class JavaServiceInterfaceGenerator extends AbstractJavaGenerator {
                 introspectedTable.getAttr(InternalAttribute.ATTR_BASE_RECORD_TYPE));
         FullyQualifiedJavaType dtoType = new FullyQualifiedJavaType(
                 introspectedTable.getAttr(InternalAttribute.ATTR_DTO_TYPE));
-        FullyQualifiedJavaType qsoType = new FullyQualifiedJavaType(
-                introspectedTable.getAttr(InternalAttribute.ATTR_QSO_TYPE));
+        FullyQualifiedJavaType qdtoType = new FullyQualifiedJavaType(
+                introspectedTable.getAttr(InternalAttribute.ATTR_QDTO_TYPE));
         serviceInterface
-                .addImportedType(new FullyQualifiedJavaType("org.springframework.web.bind.annotation.PathVariable"));
+                .addImportedType(FullyQualifiedJavaType.from(PathVariable.class));
 
         FullyQualifiedJavaType listType = FullyQualifiedJavaType.getNewListInstance();
         serviceInterface.addImportedType(dtoType);
         serviceInterface.addImportedType(listType);
-        serviceInterface.addImportedType(qsoType);
+        serviceInterface.addImportedType(qdtoType);
 
         boolean microService = microEnable();
 
@@ -152,7 +149,7 @@ public class JavaServiceInterfaceGenerator extends AbstractJavaGenerator {
             list.addTypeArgument(dtoType);
             method.setReturnType(list);
             method.setVisibility(JavaVisibility.PUBLIC);
-            Parameter param = new Parameter(qsoType, "qso");
+            Parameter param = new Parameter(qdtoType, "qso");
             method.addParameter(param);
             if (microService) {
                 annotationRequestMapping(method, method.getName(), null, null, RequestMethod.POST);
@@ -165,7 +162,7 @@ public class JavaServiceInterfaceGenerator extends AbstractJavaGenerator {
             Method method = new Method("count");
             method.setReturnType(FullyQualifiedJavaType.getIntInstance());
             method.setVisibility(JavaVisibility.PUBLIC);
-            Parameter param = new Parameter(qsoType, "qso");
+            Parameter param = new Parameter(qdtoType, "qso");
             method.addParameter(param);
             if (microService) {
                 annotationRequestMapping(method, method.getName(), null, null, RequestMethod.POST);

@@ -68,14 +68,14 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
                 introspectedTable.getAttr(InternalAttribute.ATTR_BASE_RECORD_TYPE));
         FullyQualifiedJavaType dtoType = new FullyQualifiedJavaType(
                 introspectedTable.getAttr(InternalAttribute.ATTR_DTO_TYPE));
-        FullyQualifiedJavaType qsoType = new FullyQualifiedJavaType(
-                introspectedTable.getAttr(InternalAttribute.ATTR_QSO_TYPE));
+        FullyQualifiedJavaType qdtoType = new FullyQualifiedJavaType(
+                introspectedTable.getAttr(InternalAttribute.ATTR_QDTO_TYPE));
         FullyQualifiedJavaType qdoType = new FullyQualifiedJavaType(
                 introspectedTable.getAttr(InternalAttribute.ATTR_QDO_TYPE));
         FullyQualifiedJavaType listType = FullyQualifiedJavaType.getNewListInstance();
         serviceInterface.addImportedType(boType);
         serviceInterface.addImportedType(dtoType);
-        serviceInterface.addImportedType(qsoType);
+        serviceInterface.addImportedType(qdtoType);
         serviceInterface.addImportedType(qdoType);
         serviceInterface.addImportedType(listType);
 
@@ -259,7 +259,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
             list.addTypeArgument(dtoType);
             method.setReturnType(list);
             method.setVisibility(JavaVisibility.PUBLIC);
-            Parameter param = new Parameter(qsoType, "qso");
+            Parameter param = new Parameter(qdtoType, "qso");
             method.addParameter(param);
             if (microService) {
                 annotationRequestBody(param);
@@ -284,7 +284,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
             method.addAnnotation("@Override");
             method.setReturnType(FullyQualifiedJavaType.getIntInstance());
             method.setVisibility(JavaVisibility.PUBLIC);
-            Parameter param = new Parameter(qsoType, "qso");
+            Parameter param = new Parameter(qdtoType, "qso");
             method.addParameter(param);
             if (microService) {
                 annotationRequestBody(param);
@@ -335,7 +335,7 @@ public class JavaServiceImplGenerator extends AbstractJavaGenerator {
 
             serviceInterface.addMethod(method);
         }
-        generateDtoDoMapper(introspectedTable, serviceInterface, boType, dtoType,qsoType,qdoType);
+        generateDtoDoMapper(introspectedTable, serviceInterface, boType, dtoType,qdtoType,qdoType);
 
         List<CompilationUnit> answer = new ArrayList<CompilationUnit>();
         answer.add(serviceInterface);

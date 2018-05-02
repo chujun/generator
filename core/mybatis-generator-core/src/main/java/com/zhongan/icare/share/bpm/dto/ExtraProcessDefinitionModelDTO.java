@@ -5,7 +5,7 @@ import com.zhongan.health.common.share.bean.BaseDTO;
 @lombok.Getter
 @lombok.Setter
 public class ExtraProcessDefinitionModelDTO extends BaseDTO {
-    private static final long serialVersionUID = 1525246576564L;
+    private static final long serialVersionUID = 1525247856929L;
 
     /**
      * 流程定义模型Id

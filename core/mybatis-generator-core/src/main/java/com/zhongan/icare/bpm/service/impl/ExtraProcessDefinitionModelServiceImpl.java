@@ -8,7 +8,7 @@ import com.zhongan.health.common.share.enm.YesOrNo;
 import com.zhongan.icare.bpm.bean.qdo.ExtraProcessDefinitionModelQDO;
 import com.zhongan.icare.bpm.dao.ExtraProcessDefinitionModelDAO;
 import com.zhongan.icare.bpm.dao.dataObject.ExtraProcessDefinitionModelDO;
-import com.zhongan.icare.share.bpm.bean.qso.ExtraProcessDefinitionModelQSO;
+import com.zhongan.icare.share.bpm.bean.qdto.ExtraProcessDefinitionModelQDTO;
 import com.zhongan.icare.share.bpm.dto.ExtraProcessDefinitionModelDTO;
 import com.zhongan.icare.share.bpm.service.IExtraProcessDefinitionModelService;
 import java.util.Collections;
@@ -59,7 +59,7 @@ class ExtraProcessDefinitionModelServiceImpl implements IExtraProcessDefinitionM
     }
 
     @Override
-    public List<ExtraProcessDefinitionModelDTO> list(@RequestBody ExtraProcessDefinitionModelQSO qso) {
+    public List<ExtraProcessDefinitionModelDTO> list(@RequestBody ExtraProcessDefinitionModelQDTO qso) {
         Preconditions.checkArgument(qso != null,"查询条件不能为空.");
         ExtraProcessDefinitionModelQDO qdo = buildExtraProcessDefinitionModelQDO(qso);
         qdo.setIsDeleted(YesOrNo.NO.getValue());
@@ -68,7 +68,7 @@ class ExtraProcessDefinitionModelServiceImpl implements IExtraProcessDefinitionM
     }
 
     @Override
-    public int count(@RequestBody ExtraProcessDefinitionModelQSO qso) {
+    public int count(@RequestBody ExtraProcessDefinitionModelQDTO qso) {
         Preconditions.checkArgument(qso != null,"查询条件不能为空.");
         ExtraProcessDefinitionModelQDO qdo = buildExtraProcessDefinitionModelQDO(qso);
         qdo.setIsDeleted(YesOrNo.NO.getValue());
@@ -132,7 +132,7 @@ class ExtraProcessDefinitionModelServiceImpl implements IExtraProcessDefinitionM
         return dtos;
     }
 
-    private ExtraProcessDefinitionModelQDO buildExtraProcessDefinitionModelQDO(ExtraProcessDefinitionModelQSO qso) {
+    private ExtraProcessDefinitionModelQDO buildExtraProcessDefinitionModelQDO(ExtraProcessDefinitionModelQDTO qso) {
         if(null == qso){
             return null;
         }

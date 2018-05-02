@@ -211,7 +211,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         /**
          * QSO file
          */
-        AbstractJavaGenerator qsoGenerator = new BaseQSORecordGenerator();
+        AbstractJavaGenerator qsoGenerator = new BaseQDTORecordGenerator();
         initializeAbstractGenerator(qsoGenerator, warnings, progressCallback);
         javaModelGenerators.add(qsoGenerator);
 
