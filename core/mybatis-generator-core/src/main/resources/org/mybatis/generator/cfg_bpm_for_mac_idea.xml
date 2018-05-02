@@ -42,10 +42,10 @@
 			<property name="suppressDate" value="true" />
 			<property name="suppressAllComments" value="false" />
 		</commentGenerator>
-		<!-- <jdbcConnection driverClass="com.mysql.jdbc.Driver" -->
-		<!-- connectionURL="jdbc:mysql://localhost:3306/icare_00" userId="mysql" -->
-		<!-- password="mysql"> -->
-		<!-- </jdbcConnection> -->
+		 <!--<jdbcConnection driverClass="com.mysql.jdbc.Driver"-->
+		 <!--connectionURL="jdbc:mysql://localhost:3306/activiti" userId="root"-->
+		 <!--password="root">-->
+		 <!--</jdbcConnection>-->
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
 			connectionURL="jdbc:mysql://rds6fbqrf6fbqrf.mysql.rds.aliyuncs.com:3306/icare_00"
 			userId="za_dev_icare" password="za_dev_icare_f03893">
@@ -85,7 +85,7 @@
 		</javaClientGenerator>
 
 
-		 <table tableName='act_wo_comment' domainObjectName='CommentDO'
+		 <table tableName='act_my_ru_task' domainObjectName='ExtendTodoTaskDO'
 			enableCountByExample='false' enableUpdateByExample='false'
 			enableDeleteByExample='false' enableSelectByExample='false'
 			selectByExampleQueryId='false'>
