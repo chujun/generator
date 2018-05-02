@@ -1,0 +1,4 @@
+[jc/myself_1.3.3 e6983a67] qso-
+ 11 files changed, 50 insertions(+), 45 deletions(-)
+ create mode 100644 core/mybatis-generator-core/src/main/java/com/zhongan/icare/share/bpm/bean/qdto/ExtraProcessDefinitionModelQDTO.java
+ rename core/mybatis-generator-core/src/main/java/org/mybatis/generator/codegen/mybatis3/model/{BaseQSORecordGenerator.java => BaseQDTORecordGenerator.java} (96%)
