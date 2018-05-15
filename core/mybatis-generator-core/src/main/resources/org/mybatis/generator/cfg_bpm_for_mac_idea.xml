@@ -85,12 +85,12 @@
 		</javaClientGenerator>
 
 
-		 <table tableName='act_my_extra_proc_def' domainObjectName='ExtraProcessDefinitionModelDO'
+		 <table tableName='act_my_proc_perm' domainObjectName='ProcessPermissionDO'
 			enableCountByExample='false' enableUpdateByExample='false'
 			enableDeleteByExample='false' enableSelectByExample='false'
 			selectByExampleQueryId='false'>
 			<property name="micro.version" value="v1" />
-			<property name="micro.path" value="extraProcessDefinition" />
+			<property name="micro.path" value="processPermission" />
 			<property name="cache" value="false"/>
 			 <property name="logicDelete" value="true" />
 		</table>
